@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<MIRCdocument display="tab" background="dark">
+
+	<title>Title</title>
+
+	<section heading="Examination">
+		<p><b>History:</b></p>
+		<p><b>Modality: </b></p>
+	</section>
+
+	<section heading="Discussion">
+		<p><b>Findings:</b></p>
+		<p><b>Diagnosis:</b></p>
+		<p><b>Anatomy:</b></p>
+		<p><b>Pathology:</b></p>
+	</section>
+
+	<document-type>Radiologic Teaching File</document-type>
+
+	<publication-date/>
+
+</MIRCdocument>

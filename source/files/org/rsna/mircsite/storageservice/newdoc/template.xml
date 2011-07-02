@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<MIRCdocument display="mstf" first-tab="2">
+
+ <title>Untitled</title>
+
+ <author>
+  <name>Anonymous</name>
+  <affiliation/>
+  <contact/>
+ </author>
+
+ <abstract><p>None.</p></abstract>
+
+ <keywords/>
+
+ <section heading="History">
+ </section>
+
+ <image-section heading="Images">
+ <insert-megasave width="512"/>
+ </image-section>
+
+ <section heading="Findings">
+ </section>
+
+ <section heading="Notes">
+ </section>
+
+ <section heading="Files">
+  <p>
+   <metadata-refs/>
+  </p>
+ </section>
+
+ <document-type>radiologic teaching file</document-type>
+ <findings/>
+ <discussion/>
+ <differential-diagnosis/>
+ <diagnosis/>
+ <anatomy/>
+ <pathology/>
+ <organ-system/>
+ <modality/>
+ <category/>
+ <level/>
+
+ <authorization>
+  <owner/>
+  <read/>
+  <update/>
+  <export/>
+ </authorization>
+
+</MIRCdocument>

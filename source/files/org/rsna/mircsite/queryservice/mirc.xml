@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!DOCTYPE mirc [
+    <!ENTITY mode "rad">
+    <!ENTITY sitename "My Tomcat MIRC Site">
+    <!ENTITY masthead "masthead.jpg">
+    <!ENTITY mastheadheight "75">
+    <!ENTITY showsitename "yes">
+    <!ENTITY showlogin "yes">
+    <!ENTITY showptids "yes">
+    <!ENTITY addresstype "dynamic">
+    <!ENTITY siteurl "http://192.168.0.96:8080">
+    <!ENTITY queryurl "&siteurl;/mirc">
+    <!ENTITY proxyip "">
+    <!ENTITY proxyport "">
+    <!ENTITY proxyusername "">
+    <!ENTITY proxypassword "">
+    <!ENTITY tcusersclass "org.rsna.mircsite.util.TomcatUsersXmlFileImpl">
+    <!ENTITY acctenb "no">
+    <!ENTITY defroles "">
+    <!ENTITY gpenb "no">
+    <!ENTITY startpage "altcontent">
+    <!ENTITY timeout "15">
+    <!ENTITY resultsdefault "50">
+    <!ENTITY disclaimerurl "">
+    <!ENTITY version "xxx">
+    <!ENTITY date "xxx"> ]>
+
+<mirc
+	mode="&mode;"
+	siteurl="&siteurl;"
+	addresstype="&addresstype;"
+	masthead="&masthead;"
+	mastheadheight="&mastheadheight;"
+  	startpage="&startpage;"
+  	sitename="&sitename;"
+  	showsitename="&showsitename;"
+  	showlogin="&showlogin;"
+  	showptids="&showptids;"
+  	timeout="&timeout;"
+  	version="&version;"
+  	date="&date;"
+  	disclaimerurl="&disclaimerurl;">
+
+  <proxyserver
+  		ip="&proxyip;"
+  		port="&proxyport;"
+  		username="&proxyusername;"
+  		password="&proxypassword;" />
+
+  <queryservice
+  		address="&queryurl;/query"
+  		resultsdefault="&resultsdefault;" />
+
+  <accounts
+  		enabled="&acctenb;"
+  		tcusersclass="&tcusersclass;"
+  		roles="&defroles;">
+  	<groups enabled="&gpenb;"/>
+  </accounts>
+
+  <server address="http://mirc.rsna.org/mircstorage/service">
+    The RSNA MIRC Site
+  </server>
+
+</mirc>

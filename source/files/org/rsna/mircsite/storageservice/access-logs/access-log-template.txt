@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<AuditMessage 
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="D:\data\DICOM\security\supplement95-schema.xsd">
+
+  <EventIdentification 
+      EventActionCode="R"
+      EventDateTime="@datetime"
+      EventOutcomeIndicator="0">
+
+    <EventID 
+        code="@eventcode"
+        codeSystemName="DCM" 
+        displayName="@eventname" />
+
+  </EventIdentification>
+
+  <ActiveParticipant 
+      UserID="@username"
+      UserIsRequestor="true"
+      NetworkAccessPointID="@userip" 
+      NetworkAccessPointTypeCode="2">
+
+    <RoleIDCode 
+        code="110152"
+        codeSystemName="DCM" 
+        displayName="Destination"/>
+
+  </ActiveParticipant>
+
+  <ActiveParticipant 
+      UserID="@sscontext"
+      UserIsRequestor="false"
+      NetworkAccessPointID="@ssip" 
+      NetworkAccessPointTypeCode="2">
+
+    <RoleIDCode 
+        code="110153"
+        codeSystemName="DCM" 
+        displayName="Source"/>
+
+  </ActiveParticipant>
+
+  <AuditSourceIdentification 
+      AuditSourceID="@sscontext">
+
+    <AuditSourceTypeCode code="3"/>
+
+  </AuditSourceIdentification>
+
+  <ParticipantObjectIdentification 
+      ParticipantObjectID="@siuid"
+      ParticipantObjectTypeCode="2"
+      ParticipantObjectTypeCodeRole="3"
+      ParticipantObjectDataLifeCycle="@lifecycle">
+
+    <ParticipantObjectIDTypeCode 
+        code="110180"
+        codeSystemName="DCM" 
+        displayName="Study Instance UID"/>
+
+  </ParticipantObjectIdentification>
+
+  <ParticipantObjectIdentification 
+      ParticipantObjectID="@ptid"
+      ParticipantObjectTypeCode="1"
+      ParticipantObjectTypeCodeRole="1">
+
+    <ParticipantObjectIDTypeCode code="2" />
+
+    <ParticipantObjectName>@ptname</ParticipantObjectName>
+
+  </ParticipantObjectIdentification>
+
+</AuditMessage>

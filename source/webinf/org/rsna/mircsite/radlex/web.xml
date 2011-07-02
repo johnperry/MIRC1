@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+
+	<servlet>
+		<servlet-name> RadLex </servlet-name>
+		<servlet-class> org.rsna.mircsite.radlex.RadLex </servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name> AdminService </servlet-name>
+		<servlet-class> org.rsna.mircsite.radlex.AdminService </servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name> RadLex </servlet-name>
+		<url-pattern> /service </url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name> AdminService </servlet-name>
+		<url-pattern> /admin </url-pattern>
+	</servlet-mapping>
+	
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>Radlex Admin Service</web-resource-name>
+			<url-pattern>/admin</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>RadLexAdmin</role-name>
+		</auth-constraint>
+	</security-constraint>
+		
+	<login-config>
+		<auth-method>BASIC</auth-method>
+		<realm-name>RadLex Admin Service</realm-name>
+	</login-config>
+	
+	<security-role>
+		<description>RadLex Administrator</description>
+		<role-name>RadLexAdmin</role-name>
+	</security-role>
+
+</web-app>

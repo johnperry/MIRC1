@@ -1,0 +1,46 @@
+<html>
+	<head>
+		<title>About This MIRC Site</title>
+	</head>
+	<body>
+		<h2>Search Instructions</h2>
+		<h3>Selecting Servers to Search</h3>
+		<p>
+			In the Search menu, click on "Select Storage Services". A menu box will appear, allowing selection of one or more MIRC storage services to search. If no sites are selected, the first site in the list is searched by default. To select more than one site, hold the "Ctrl" key down while clicking on additional sites.
+		</p>
+		<h3>Search Fields</h3>
+		<p>
+			Two search pages are available. The simple page contains only one free-text field. The full page contains multiple buttons allowing selection of groups of related fields as well as modifiers which define how many results are to be displayed in one search and how the results are to be displayed.
+		<p>
+			The fields on the search pages are used to search for documents containing information of specific types. MIRC selects documents that match all fields specified on the query page. If a field is blank, MIRC accepts all documents as matches for that field.
+		</p>
+		<p>
+			Each field may be composed of multiple search items together with boolean logic allowing complex searches to be defined. The Boolean operators are:
+			<ul>
+				<li> " " (space) is the logical <u>and</u> operator. A query field containing
+				<font color="red"><code>abc def</code></font>
+				matches only documents containing both <font color="red"><code>abc</code></font> and <font color="red"><code>def</code></font> (in any order) in that field.
+				</li>
+				<li> "|" is the logical <u>or</u> operator. A query field containing
+				<font color="red"><code>abc | def</code></font>
+				matches documents containing either or both of <font color="red"><code>abc</code></font> and <font color="red"><code>def</code></font> in that field.
+				</li>
+				<li> Items included in parentheses are logically grouped. A query field containing
+				<font color="red"><code>abc (def | ghi)</code></font>
+				matches documents containing <font color="red"><code>abc</code></font> plus either or both of <font color="red"><code>def</code></font> and <font color="red"><code>ghi</code></font> in that field.
+				</li>
+				<li> Items included in quotations marks are grouped into one logical item. A query field containing
+				<font color="red"><code>"abc def"</code></font>
+				matches documents containing <font color="red"><code>abc def</code></font> as a single character sequence in that field.
+				</li>
+			</ul>
+		</p>
+		<p>
+			The Free Text query field searches for items anywhere in a document, while the other query fields search only information identified within the document as being of the identified type.
+		</p>
+		<h3>Results per Site</h3>
+		<p>
+			On the full search page, the "results/site" field determines the maximum number of responses requested from each storage service which is searched. The "Next" and "Prev" links on the search results page allow the user to request additional groups of results from the storage services.
+		</p>
+	</body>
+</html>

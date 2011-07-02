@@ -1,0 +1,16 @@
+<mbean         name="SmartMemoryRealm"
+            className="org.apache.catalina.mbeans.ClassNameMBean"
+          description="Custom Memory Realm"
+               domain="Catalina"
+                group="Realm"
+                 type="org.rsna.tomcat.realm.SmartMemoryRealm">
+
+    <attribute   name="className"
+          description="Fully qualified class name of the managed object"
+                 type="java.lang.String"
+            writeable="false"/>
+
+    <attribute   name="debug"
+          description="The debugging detail level for this component"
+                 type="int"/>
+  </mbean>

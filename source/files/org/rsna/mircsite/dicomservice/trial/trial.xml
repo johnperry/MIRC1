@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<clinical-trial autostart="no">
+
+  <proxy-server enabled="no">
+    <proxy-ip></proxy-ip>
+    <proxy-port></proxy-port>
+    <proxy-user></proxy-user>
+    <proxy-password></proxy-password>
+  </proxy-server>
+
+  <remapper key-file="">
+    <uid-root/>
+    <base-date/>
+    <patient-id first="1" width="4">
+      <prefix/>
+      <suffix/>
+    </patient-id>
+  </remapper>
+
+  <dicom-store>
+    <ae-title>TRIALAETITLE</ae-title>
+    <port>3333</port>
+    <anonymize>no</anonymize>
+  </dicom-store>
+
+  <http-export>
+  </http-export>
+
+  <http-import>
+    <site>*</site>
+    <anonymize>no</anonymize>
+  </http-import>
+
+  <dicom-export>
+  </dicom-export>
+
+</clinical-trial>

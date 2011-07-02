@@ -1,0 +1,689 @@
+<?xml version="1.0"?>
+
+<project name="MIRC" basedir="." default="mircsite">
+
+   <property name="version" value="T36c"/>
+
+   <property name="build" value="${basedir}/build"/>
+   <property name="products" value="${basedir}/products"/>
+   <property name="libraries" value="${basedir}/libraries"/>
+   <property name="documentation" value="${basedir}/documentation"/>
+
+   <property name="source" value="${basedir}/source"/>
+   <property name="java" value="${source}/java"/>
+   <property name="files" value="${source}/files"/>
+   <property name="webinf" value="${source}/webinf"/>
+
+   <property name="dicom" value="org/rsna/dicom"/>
+
+   <property name="rsnautil" value="org/rsna/util"/>
+   <property name="fieldcenter" value="org/rsna/fieldcenter"/>
+   <property name="exportmanager" value="org/rsna/exportmanager"/>
+   <property name="httpreceiver" value="org/rsna/httpreceiver"/>
+   <property name="dicomeditor" value="org/rsna/dicomeditor"/>
+   <property name="manifest" value="org/rsna/manifest"/>
+   <property name="installer" value="org/rsna/installer"/>
+   <property name="database" value="org/rsna/database"/>
+   <property name="filesender" value="org/rsna/filesender"/>
+   <property name="smartrealm" value="org/rsna/tomcat"/>
+
+   <property name="httptest" value="org/rsna/httptest"/>
+   <property name="decipher" value="org/rsna/decipher"/>
+   <property name="keymaker" value="org/rsna/keymaker"/>
+   <property name="auditlogger" value="org/rsna/auditlogger"/>
+
+   <property name="mircsite" value="org/rsna/mircsite"/>
+   <property name="dicomviewer" value="org/rsna/dicomviewer"/>
+   <property name="queryservice" value="${mircsite}/queryservice"/>
+   <property name="fileservice" value="${mircsite}/fileservice"/>
+   <property name="storageservice" value="${mircsite}/storageservice"/>
+   <property name="dicomservice" value="${mircsite}/dicomservice"/>
+   <property name="tceservice" value="${mircsite}/tceservice"/>
+   <property name="mircadmin" value="${mircsite}/mircadmin"/>
+   <property name="mircservlets" value="${mircsite}/mircservlets"/>
+   <property name="mirclog" value="${mircsite}/log"/>
+   <property name="anonymizer" value="${mircsite}/anonymizer"/>
+   <property name="testservice" value="${mircsite}/testservice"/>
+   <property name="mircutil" value="${mircsite}/util"/>
+   <property name="redirector" value="${mircsite}/redirector/queryservice"/>
+
+   <path id="dcm4che-classpath">
+      <pathelement location="${libraries}/dcm4che.jar"/>
+      <pathelement location="${libraries}/log4j.jar"/>
+      <pathelement location="${libraries}/getopt.jar"/>
+   </path>
+
+   <path id="rsnautil-classpath">
+      <path refid="dcm4che-classpath"/>
+      <pathelement location="${libraries}/dicom.jar"/>
+   </path>
+
+   <path id="fieldcenter-classpath">
+      <path refid="rsnautil-classpath"/>
+      <pathelement location="${libraries}/rsnautil.jar"/>
+      <pathelement location="${libraries}/mircutil.jar"/>
+      <pathelement location="${libraries}/anonymizer.jar"/>
+   </path>
+
+   <path id="exportmanager-classpath">
+      <path refid="fieldcenter-classpath"/>
+   </path>
+
+   <path id="manifest-classpath">
+      <path refid="rsnautil-classpath"/>
+      <pathelement location="${libraries}/rsnautil.jar"/>
+      <pathelement location="${libraries}/mircutil.jar"/>
+   </path>
+
+   <path id="dicomeditor-classpath">
+      <path refid="fieldcenter-classpath"/>
+   </path>
+
+   <path id="filesender-classpath">
+      <path refid="fieldcenter-classpath"/>
+   </path>
+
+   <path id="smartrealm-classpath">
+    <pathelement location="${libraries}/catalina.jar"/>
+    <pathelement location="${libraries}/catalina-optional.jar"/>
+    <pathelement location="${libraries}/commons-logging-api.jar"/>
+   </path>
+
+   <path id="mircsite-classpath">
+      <path refid="dcm4che-classpath"/>
+      <pathelement location="${libraries}/jdbm.jar"/>
+      <pathelement location="${libraries}/servlet.jar" />
+      <pathelement location="${libraries}/cos.jar" />
+      <pathelement location="${libraries}/dicom.jar"/>
+      <pathelement location="${libraries}/gif.jar"/>
+      <pathelement location="${libraries}/mircutil.jar"/>
+      <pathelement location="${libraries}/mirclog.jar"/>
+      <pathelement location="${libraries}/anonymizer.jar"/>
+	  <pathelement location="${libraries}/batik-rasterizer-partial.jar"/>
+      <pathelement location="${libraries}/commons-pool-1.4.jar"/>
+      <pathelement location="${libraries}/xmldb.jar"/>
+      <pathelement location="${libraries}/xmlrpc-client-3.1.1.jar"/>
+   </path>
+
+   <path id="database-classpath">
+      <pathelement location="${build}/${storageservice}" />
+      <pathelement location="${build}/${dicomservice}" />
+   </path>
+
+   <path id="javadocs-classpath">
+      <path refid="mircsite-classpath"/>
+      <path refid="smartrealm-classpath"/>
+      <pathelement location="${libraries}/rsnautil.jar" />
+   </path>
+
+	<target name="init">
+		<tstamp>
+			<format property="today" pattern="yyyy.MM.dd"/>
+			<format property="now" pattern="HH:mm:ss z"/>
+		</tstamp>
+		<echo message="Time now ${now}"/>
+		<echo message="Building version ${version}"/>
+		<echo message="ant.java.version = ${ant.java.version}" />
+		<mkdir dir="${build}"/>
+		<mkdir dir="${products}"/>
+	</target>
+
+   <target name="clean">
+      <delete dir="${build}" failonerror="false"/>
+      <delete dir="${documentation}" failonerror="false"/>
+      <delete failonerror="false">
+         <fileset  dir="${libraries}"
+            includes="dicom.jar,mircutil.jar,mirclog.jar,anonymizer.jar,rsnautil.jar,mircservlets.jar"/>
+      </delete>
+   </target>
+
+   <target name="clean-but-keep-javadocs">
+      <delete dir="${build}" failonerror="false"/>
+      <delete failonerror="false">
+         <fileset  dir="${libraries}"
+            includes="dicom.jar,mircutil.jar,mirclog.jar,anonymizer.jar,rsnautil.jar,mircservlets.jar"/>
+      </delete>
+   </target>
+
+   <target name="dicom" depends="init">
+      <javac srcdir="${java}/${dicom}" destdir="${build}" optimize="on"
+             classpathref="dcm4che-classpath"
+             debug="true" debuglevel="lines,vars,source"/>
+      <jar destfile="${libraries}/dicom.jar">
+         <manifest>
+            <attribute name="Class-Path" value=". dcm4che.jar getopt.jar log4j.jar"/>
+            <attribute name="Implementation-Version" value="${today} @ ${now}"/>
+         </manifest>
+         <fileset dir="${build}" includes="${dicom}/**"/>
+         <fileset dir="${files}/${dicom}" includes="*.*" excludes="DcmRcv.properties"/>
+         <fileset dir="${files}" includes="org/rsna/dicom/DcmRcv.properties"/>
+      </jar>
+   </target>
+
+   <target name="rsnautil" depends="init,mirclog">
+      <javac srcdir="${java}/${rsnautil}" destdir="${build}" optimize="on"
+             classpathref="rsnautil-classpath"
+             debug="true" debuglevel="lines,vars,source"/>
+      <jar destfile="${libraries}/rsnautil.jar">
+         <manifest>
+            <attribute name="Implementation-Version" value="${today} @ ${now}"/>
+         </manifest>
+         <fileset dir="${build}" includes="${rsnautil}/**"/>
+      </jar>
+   </target>
+
+   <target name="installer" depends="init">
+      <javac srcdir="${java}/${installer}" destdir="${build}" optimize="on"
+             debug="true" debuglevel="lines,vars,source"/>
+   </target>
+
+   <target name="httpreceiver" depends="init">
+      <javac srcdir="${java}/${httpreceiver}" destdir="${build}"
+         debug="true" debuglevel="lines,vars,source"/>
+      <jar jarfile="${products}/HttpReceiver.jar">
+         <manifest>
+            <attribute name="Main-Class" value="org.rsna.httpreceiver.HttpReceiver"/>
+            <attribute name="Implementation-Version" value="${today} @ ${now}"/>
+         </manifest>
+         <fileset dir="${build}" includes="${httpreceiver}/**"/>
+      </jar>
+   </target>
+
+   <target name="fieldcenter" depends="init,dicom,installer,rsnautil,mircutil,mirclog,anonymizer">
+      <javac srcdir="${java}/${fieldcenter}" destdir="${build}" optimize="on"
+             classpathref="fieldcenter-classpath"
+             debug="true" debuglevel="lines,vars,source"/>
+      <jar destfile="${products}/FieldCenter.jar">
+         <manifest>
+            <attribute name="Main-Class" value="org.rsna.fieldcenter.FieldCenter"/>
+            <attribute name="Class-Path"
+               value=". dcm4che.jar getopt.jar log4j.jar dicom.jar mirclog.jar rsnautil.jar mircutil.jar anonymizer.jar"/>
+            <attribute name="Implementation-Version" value="${today} @ ${now}"/>
+         </manifest>
+         <fileset dir="${build}"
+            includes="${fieldcenter}/**"
+            excludes="${fieldcenter}/Installer**"/>
+      </jar>
+      <copy overwrite="true" todir="${build}/FieldCenter">
+         <fileset dir="${products}" includes="FieldCenter.jar"/>
+         <fileset dir="${files}/${fieldcenter}/TRIAL" includes="*.*"/>
+         <fileset dir="${libraries}" includes="dcm4che.jar"/>
+         <fileset dir="${libraries}" includes="log4j.jar"/>
+         <fileset dir="${libraries}" includes="getopt.jar"/>
+         <fileset dir="${libraries}" includes="dicom.jar"/>
+         <fileset dir="${libraries}" includes="mirclog.jar"/>
+         <fileset dir="${libraries}" includes="rsnautil.jar"/>
+         <fileset dir="${libraries}" includes="mircutil.jar"/>
+         <fileset dir="${libraries}" includes="anonymizer.jar"/>
+      </copy>
+      <copy overwrite="true" failonerror="false" todir="${build}/FieldCenter">
+         <fileset dir="${products}" includes="Decipher.jar"/>
+      </copy>
+      <jar destfile="${products}/FieldCenter-installer-TRIAL.jar">
+         <manifest>
+            <attribute name="Main-Class" value="org.rsna.fieldcenter.Installer"/>
+            <attribute name="Implementation-Version" value="${today} @ ${now}"/>
+         </manifest>
+         <fileset dir="${build}"
+         	includes="${fieldcenter}/Installer** ${installer}/** FieldCenter/*.*"/>
+      </jar>
+   </target>
+
+   <target name="exportmanager" depends="init,dicom,installer,rsnautil,mircutil,mirclog,anonymizer">
+      <javac srcdir="${java}/${exportmanager}" destdir="${build}" optimize="on"
+             classpathref="exportmanager-classpath"
+             debug="true" debuglevel="lines,vars,source">
+         <compilerarg value="-Xlint:unchecked"/>
+      </javac>
+      <jar destfile="${products}/ExportManager.jar">
+         <manifest>
+            <attribute name="Main-Class" value="org.rsna.exportmanager.ExportManager"/>
+            <attribute name="Class-Path"
+               value=". dcm4che.jar getopt.jar log4j.jar dicom.jar mirclog.jar rsnautil.jar mircutil.jar anonymizer.jar"/>
+            <attribute name="Implementation-Version" value="${today} @ ${now}"/>
+         </manifest>
+         <fileset dir="${build}"
+            includes="${exportmanager}/**"
+            excludes="${exportmanager}/Installer**"/>
+      </jar>
+      <copy overwrite="true" todir="${build}/ExportManager">
+         <fileset dir="${products}" includes="ExportManager.jar"/>
+         <fileset dir="${files}/${exportmanager}" includes="*.*"/>
+         <fileset dir="${libraries}" includes="dcm4che.jar"/>
+         <fileset dir="${libraries}" includes="log4j.jar"/>
+         <fileset dir="${libraries}" includes="getopt.jar"/>
+         <fileset dir="${libraries}" includes="dicom.jar"/>
+         <fileset dir="${libraries}" includes="mirclog.jar"/>
+         <fileset dir="${libraries}" includes="rsnautil.jar"/>
+         <fileset dir="${libraries}" includes="mircutil.jar"/>
+         <fileset dir="${libraries}" includes="anonymizer.jar"/>
+      </copy>
+      <jar destfile="${products}/ExportManager-installer.jar">
+         <manifest>
+            <attribute name="Main-Class" value="org.rsna.exportmanager.Installer"/>
+            <attribute name="Implementation-Version" value="${today} @ ${now}"/>
+         </manifest>
+         <fileset dir="${build}"
+         	includes="${exportmanager}/Installer** ${installer}/** ExportManager/*.*"/>
+      </jar>
+   </target>
+
+   <target name="manifest" depends="init,dicom,installer,rsnautil,mircutil">
+      <javac srcdir="${java}/${manifest}" destdir="${build}" optimize="on"
+             classpathref="manifest-classpath"
+             debug="true" debuglevel="lines,vars,source">
+         <compilerarg value="-Xlint:unchecked"/>
+      </javac>
+      <jar destfile="${products}/ManifestGenerator.jar">
+         <manifest>
+            <attribute name="Main-Class" value="org.rsna.manifest.ManifestGenerator"/>
+            <attribute name="Class-Path"
+               value=". dcm4che.jar getopt.jar log4j.jar dicom.jar rsnautil.jar mircutil.jar"/>
+            <attribute name="Implementation-Version" value="${today} @ ${now}"/>
+         </manifest>
+         <fileset dir="${build}"
+            includes="${manifest}/**"
+            excludes="${manifest}/Installer**"/>
+      </jar>
+      <copy overwrite="true" todir="${build}/ManifestGenerator">
+         <fileset dir="${products}" includes="ManifestGenerator.jar"/>
+         <fileset dir="${files}/${manifest}" includes="*.*"/>
+         <fileset dir="${libraries}" includes="dcm4che.jar"/>
+         <fileset dir="${libraries}" includes="log4j.jar"/>
+         <fileset dir="${libraries}" includes="getopt.jar"/>
+         <fileset dir="${libraries}" includes="dicom.jar"/>
+         <fileset dir="${libraries}" includes="mirclog.jar"/>
+         <fileset dir="${libraries}" includes="rsnautil.jar"/>
+         <fileset dir="${libraries}" includes="mircutil.jar"/>
+      </copy>
+      <jar destfile="${products}/ManifestGenerator-installer.jar">
+         <manifest>
+            <attribute name="Main-Class" value="org.rsna.manifest.Installer"/>
+            <attribute name="Implementation-Version" value="${today} @ ${now}"/>
+         </manifest>
+         <fileset dir="${build}"
+         	includes="${manifest}/Installer** ${installer}/** ManifestGenerator/*.*"/>
+      </jar>
+   </target>
+
+   <target name="dicomeditor" depends="init,installer,rsnautil,mircutil,anonymizer">
+      <javac srcdir="${java}/${dicomeditor}" destdir="${build}" optimize="on"
+           classpathref="dicomeditor-classpath"
+           debug="true" debuglevel="lines,vars,source"/>
+      <jar destfile="${products}/DicomEditor.jar">
+         <manifest>
+            <attribute name="Main-Class" value="org.rsna.dicomeditor.DicomEditor"/>
+            <attribute name="Class-Path"
+               value=". dcm4che.jar getopt.jar log4j.jar dicom.jar rsnautil.jar mircutil.jar anonymizer.jar dcm4che-imageio-2.0.21.jar"/>
+            <attribute name="Implementation-Version" value="${today} @ ${now}"/>
+         </manifest>
+         <fileset dir="${build}"
+            includes="${dicomeditor}/**"
+            excludes="${dicomeditor}/Installer** ${dicomeditor}/CmdLineAnonymizer**"/>
+      </jar>
+      <jar destfile="${products}/da.jar">
+         <manifest>
+            <attribute name="Main-Class" value="org.rsna.dicomeditor.CmdLineAnonymizer"/>
+            <attribute name="Class-Path"
+               value=". dcm4che.jar getopt.jar log4j.jar dicom.jar rsnautil.jar mircutil.jar anonymizer.jar dcm4che-imageio-2.0.21.jar"/>
+            <attribute name="Implementation-Version" value="${today} @ ${now}"/>
+         </manifest>
+         <fileset dir="${build}"
+            includes="${dicomeditor}/CmdLineAnonymizer**"/>
+      </jar>
+      <copy overwrite="true" todir="${build}/DicomEditor">
+         <fileset dir="${products}" includes="DicomEditor.jar"/>
+         <fileset dir="${products}" includes="da.jar"/>
+         <fileset dir="${files}/${dicomeditor}" includes="*.*"/>
+         <fileset dir="${libraries}" includes="dcm4che.jar"/>
+         <fileset dir="${libraries}" includes="log4j.jar"/>
+         <fileset dir="${libraries}" includes="getopt.jar"/>
+         <fileset dir="${libraries}" includes="dicom.jar"/>
+         <fileset dir="${libraries}" includes="rsnautil.jar"/>
+         <fileset dir="${libraries}" includes="mircutil.jar"/>
+         <fileset dir="${libraries}" includes="anonymizer.jar"/>
+         <fileset dir="${libraries}" includes="dcm4che-imageio-rle-2.0.21.jar"/>
+         <fileset dir="${libraries}" includes="slf4j-api-1.4.3.jar"/>
+         <fileset dir="${libraries}" includes="slf4j-log4j12-1.4.3.jar"/>
+      </copy>
+      <jar destfile="${products}/DicomEditor-installer.jar">
+         <manifest>
+            <attribute name="Main-Class" value="org.rsna.dicomeditor.Installer"/>
+            <attribute name="Implementation-Version" value="${today} @ ${now}"/>
+         </manifest>
+         <fileset dir="${build}"
+            includes="${dicomeditor}/Installer** ${installer}/** DicomEditor/*.*"/>
+      </jar>
+   </target>
+
+   <target name="mircutil" depends="init">
+      <javac srcdir="${java}/${mircutil}" destdir="${build}" optimize="on"
+             classpathref="mircsite-classpath"
+             debug="true" debuglevel="lines,vars,source"/>
+      <jar destfile="${libraries}/mircutil.jar">
+         <manifest>
+            <attribute name="Version" value="${version}"/>
+            <attribute name="Date" value="${today} at ${now}"/>
+         </manifest>
+         <fileset dir="${build}" includes="${mircutil}/**"/>
+      </jar>
+   </target>
+
+   <target name="mircservlets" depends="init">
+      <javac srcdir="${java}/${mircservlets}" destdir="${build}" optimize="on"
+             classpathref="mircsite-classpath"
+             debug="true" debuglevel="lines,vars,source"/>
+      <jar destfile="${libraries}/mircservlets.jar">
+         <manifest>
+            <attribute name="Version" value="${version}"/>
+            <attribute name="Date" value="${today} at ${now}"/>
+         </manifest>
+         <fileset dir="${build}" includes="${mircservlets}/**"/>
+      </jar>
+   </target>
+
+   <target name="mirclog" depends="init">
+      <javac srcdir="${java}/${mirclog}" destdir="${build}" optimize="on"
+             classpathref="mircsite-classpath"
+             debug="true" debuglevel="lines,vars,source"/>
+      <jar destfile="${libraries}/mirclog.jar">
+         <manifest>
+            <attribute name="Version" value="${version}"/>
+            <attribute name="Date" value="${today} at ${now}"/>
+         </manifest>
+         <fileset dir="${build}" includes="${mirclog}/**"/>
+      </jar>
+   </target>
+
+   <target name="anonymizer" depends="init">
+      <javac srcdir="${java}/${anonymizer}" destdir="${build}" optimize="on"
+             classpathref="mircsite-classpath"
+             debug="true" debuglevel="lines,vars,source"/>
+      <jar destfile="${libraries}/anonymizer.jar">
+         <manifest>
+            <attribute name="Version" value="${version}"/>
+            <attribute name="Date" value="${today} at ${now}"/>
+         </manifest>
+         <fileset dir="${build}" includes="${anonymizer}/**"/>
+      </jar>
+   </target>
+
+   <target name="testdatabase" depends="init,mircsite">
+      <javac srcdir="${java}/${database}" destdir="${build}" optimize="on"
+             classpathref="database-classpath"
+             debug="true" debuglevel="lines,vars,source"/>
+      <jar destfile="${products}/testdatabase.jar">
+         <manifest>
+            <attribute name="Version" value="${version}"/>
+            <attribute name="Date" value="${today} at ${now}"/>
+         </manifest>
+         <fileset dir="${build}" includes="${database}/**"/>
+      </jar>
+   </target>
+
+   <target name="mircsite" depends="init,smartrealm,dicom,mircutil,mirclog,anonymizer,mircservlets">
+
+      <javac srcdir="${java}/${mircsite}" destdir="${build}" optimize="on" deprecation="on"
+             classpathref="mircsite-classpath"
+             debug="true" debuglevel="lines,vars,source">
+          <!--<compilerarg line="-Xlint:unchecked"/>-->
+      </javac>
+
+		<mkdir dir="${build}/dicomviewer/dicomviewer"/>
+		<mkdir dir="${build}/dicomviewer/dicomviewer/imagej"/>
+
+		<copy todir="${build}/dicomviewer/dicomviewer/imagej">
+			<fileset dir="${files}/${dicomviewer}/imagej/"/>
+		</copy>
+
+      <war description="Query Service"
+         destfile="${products}/queryservice.war"
+         webxml="${webinf}/${queryservice}/web.xml">
+         <manifest>
+            <attribute name="Version" value="${version}"/>
+            <attribute name="Date" value="${today} at ${now}"/>
+         </manifest>
+         <fileset dir="${files}/${queryservice}"/>
+         <classes dir="${build}" includes="${queryservice}/" />
+         <classes dir="${webinf}/${queryservice}" includes="log4j.properties" />
+      </war>
+
+      <war description="File Service"
+         destfile="${products}/fileservice.war"
+         webxml="${webinf}/${fileservice}/web.xml">
+         <manifest>
+            <attribute name="Version" value="${version}"/>
+            <attribute name="Date" value="${today} at ${now}"/>
+         </manifest>
+         <fileset dir="${files}/${storageservice}"
+            includes="content-types.properties"/>
+         <fileset dir="${files}/${fileservice}"/>
+         <classes dir="${build}"
+            includes="${fileservice}/*.*" />
+         <classes dir="${webinf}/${queryservice}" includes="log4j.properties" />
+         <lib dir="${libraries}"
+            includes="anonymizer.jar,mirclog.jar"/>
+      </war>
+
+      <war description="Storage Service"
+         destfile="${products}/storageservice.war"
+         webxml="${webinf}/${storageservice}/web.xml">
+         <manifest>
+            <attribute name="Version" value="${version}"/>
+            <attribute name="Date" value="${today} at ${now}"/>
+         </manifest>
+         <fileset dir="${files}/${storageservice}"/>
+         <fileset dir="${files}/${dicomservice}"/>
+         <fileset dir="${files}/${tceservice}"/>
+      	 <fileset dir="${build}/dicomviewer/"/>
+         <classes dir="${build}"
+            includes="${storageservice}/*.*
+                      ${fileservice}/FileIndex*.*
+                      ${dicomservice}/*.*
+                      ${tceservice}/*.*" />
+         <classes dir="${webinf}/${queryservice}" includes="log4j.properties" />
+         <lib dir="${libraries}"
+            includes="anonymizer.jar,mirclog.jar"/>
+      </war>
+
+    <war description="MIRC Admin"
+       destfile="${products}/mircadmin.war"
+       webxml="${webinf}/${mircadmin}/web.xml">
+       <manifest>
+            <attribute name="Version" value="${version}"/>
+            <attribute name="Date" value="${today} at ${now}"/>
+       </manifest>
+       <fileset dir="${files}/${mircadmin}"/>
+       <classes dir="${build}"
+          includes="${mircadmin}/"/>
+    </war>
+
+      <war description="Test Service"
+         destfile="${products}/mirctest.war"
+         webxml="${webinf}/${testservice}/web.xml">
+         <manifest>
+            <attribute name="Version" value="${version}"/>
+            <attribute name="Date" value="${today} at ${now}"/>
+         </manifest>
+         <classes dir="${build}"
+            includes="${testservice}/*.*
+                      ${storageservice}/MircQueryProgram*.*" />
+      </war>
+
+      <copy todir="${build}/files">
+         <fileset dir="${files}/${queryservice}" includes="mirc.xml"/>
+         <fileset dir="${files}/${redirector}" includes="index.html"/>
+         <fileset dir="${products}" includes="smartmemoryrealm.jar"/>
+      </copy>
+      <copy todir="${build}/modules">
+         <fileset dir="${products}"
+            includes="queryservice.war fileservice.war storageservice.war mirctest.war mircadmin.war"/>
+      </copy>
+
+      <!-- Build the full version -->
+      <delete dir="${build}/libraries" failonerror="false"/>
+      <copy todir="${build}/libraries">
+         <fileset dir="${libraries}"
+         	includes="dicom.jar mircutil.jar mircservlets.jar"/>
+      </copy>
+
+      <copy todir="${build}/libraries">
+         <fileset dir="${libraries}"
+         	includes="dcm4che.jar getopt.jar log4j.jar cos.jar
+         				gif.jar serializer.jar xalan.jar
+         				xercesImpl.jar xml-apis.jar xsltc.jar
+         				batik-rasterizer-partial.jar jdbm.jar
+         				commons-pool-1.4.jar xmldb.jar
+         				xmlrpc-client-3.1.1.jar xmlrpc-common-3.1.1.jar
+         				ws-commons-util-1.0.2.jar"/>
+      </copy>
+
+      <jar jarfile="${products}/MIRCsite-installer-full.jar" basedir="${build}"
+         includes="${mircsite}/installer/*.*
+                   modules/*.*
+                   libraries/*.*
+                   files/*.*" >
+         <manifest>
+            <attribute name="Main-Class" value="org.rsna.mircsite.installer.Installer"/>
+            <attribute name="Version" value="${version}"/>
+            <attribute name="Date" value="${today} at ${now}"/>
+         </manifest>
+      </jar>
+
+    <jar jarfile="${products}/MIRCFileMover.jar" basedir="${build}"
+       includes="${mircsite}/installer/filemover/*.*" >
+       <manifest>
+          <attribute name="Main-Class" value="org.rsna.mircsite.installer.filemover.FileMover"/>
+          <attribute name="Implementation-Version" value="${today} @ ${now}"/>
+       </manifest>
+    </jar>
+   </target>
+
+   <target name="filesender" depends="init,dicom,installer,rsnautil">
+      <javac srcdir="${java}/${filesender}" destdir="${build}" optimize="on"
+             classpathref="filesender-classpath"
+             debug="true" debuglevel="lines,vars,source"/>
+      <copy todir="${build}">
+         <fileset dir="${files}/${storageservice}"
+            includes="content-types.properties"/>
+      </copy>
+      <jar destfile="${products}/FileSender.jar">
+         <manifest>
+            <attribute name="Main-Class" value="org.rsna.filesender.FileSender"/>
+            <attribute name="Class-Path" value="dcm4che.jar dicom.jar rsnautil.jar getopt.jar log4j.jar"/>
+         </manifest>
+         <fileset dir="${build}"
+            includes="${filesender}/*.* content-types.properties"
+            excludes="${filesender}/Installer** ${filesender}/CmdLineInstaller** "/>
+      </jar>
+      <jar destfile="${products}/fs.jar">
+         <manifest>
+            <attribute name="Main-Class" value="org.rsna.filesender.CmdLineSender"/>
+            <attribute name="Class-Path"
+               value="dcm4che.jar dicom.jar rsnautil.jar getopt.jar log4j.jar"/>
+            <attribute name="Implementation-Version" value="${today} @ ${now}"/>
+         </manifest>
+         <fileset dir="${build}"
+            includes="${filesender}/CmdLineSender** content-types.properties"/>
+      </jar>
+      <mkdir dir="${build}/FileSender"/>
+      <copy overwrite="true" todir="${build}/FileSender">
+         <fileset dir="${products}" includes="FileSender.jar"/>
+         <fileset dir="${products}" includes="fs.jar"/>
+         <fileset dir="${libraries}" includes="dcm4che.jar"/>
+         <fileset dir="${libraries}" includes="dicom.jar"/>
+         <fileset dir="${libraries}" includes="log4j.jar"/>
+         <fileset dir="${libraries}" includes="getopt.jar"/>
+         <fileset dir="${libraries}" includes="rsnautil.jar"/>
+      </copy>
+      <jar destfile="${products}/FileSender-installer.jar">
+         <manifest>
+            <attribute name="Main-Class" value="org.rsna.filesender.Installer"/>
+            <attribute name="Implementation-Version" value="${today} @ ${now}"/>
+         </manifest>
+         <fileset dir="${build}"
+         	includes="${filesender}/Installer** ${installer}/** FileSender/*.*"/>
+      </jar>
+   </target>
+
+	<target name="smartrealm" depends="init">
+	      <javac srcdir="${java}/${smartrealm}" destdir="${build}" optimize="on"
+	             classpathref="smartrealm-classpath"
+	             debug="true" debuglevel="lines,vars,source"/>
+	      <jar destfile="${products}/smartmemoryrealm.jar">
+	         <fileset dir="${build}"
+	            includes="${smartrealm}/"/>
+	         <fileset dir="${files}"
+	            includes="${smartrealm}/"/>
+	      </jar>
+	  </target>
+
+   <target name="decipher" depends="init,rsnautil">
+      <javac srcdir="${java}/${decipher}" destdir="${build}"
+         debug="true" debuglevel="lines,vars,source"/>
+      <jar jarfile="${products}/Decipher.jar">
+         <manifest>
+            <attribute name="Main-Class" value="org.rsna.decipher.Decipher"/>
+            <attribute name="Implementation-Version" value="${today} @ ${now}"/>
+         </manifest>
+         <fileset dir="${build}" includes="${decipher}/** ${rsnautil}/Key**"/>
+      </jar>
+   </target>
+
+   <target name="keymaker" depends="init,rsnautil,mircutil">
+      <javac srcdir="${java}/${keymaker}" destdir="${build}"
+         debug="true" debuglevel="lines,vars,source"/>
+      <jar jarfile="${products}/KeyMaker.jar">
+         <manifest>
+            <attribute name="Main-Class" value="org.rsna.keymaker.KeyMaker"/>
+            <attribute name="Implementation-Version" value="${today} @ ${now}"/>
+         </manifest>
+         <fileset dir="${build}" includes="${keymaker}/** ${rsnautil}/Key** ${rsnautil}/FileUtil**"/>
+      </jar>
+   </target>
+
+   <target name="auditlogger" depends="init">
+      <javac srcdir="${java}/${auditlogger}" destdir="${build}"
+         debug="true" debuglevel="lines,vars,source"/>
+      <jar jarfile="${products}/AuditLogger.jar">
+         <manifest>
+            <attribute name="Main-Class" value="org.rsna.auditlogger.AuditLogger"/>
+            <attribute name="Implementation-Version" value="${today} @ ${now}"/>
+         </manifest>
+         <fileset dir="${build}" includes="${auditlogger}/**"/>
+      </jar>
+   </target>
+
+   <target name="httptest" depends="init">
+      <javac srcdir="${java}/${httptest}" destdir="${build}"
+         debug="true" debuglevel="lines,vars,source"/>
+      <copy todir="${build}">
+         <fileset dir="${files}/${httptest}"
+            includes="Instructions.html"/>
+      </copy>
+      <jar jarfile="${products}/HttpTest.jar" basedir="${build}"
+         includes="${httptest}/*.* Instructions.html" >
+         <manifest>
+            <attribute name="Main-Class" value="org.rsna.httptest.HttpTest"/>
+         </manifest>
+      </jar>
+   </target>
+
+   <target name="javadocs">
+      <mkdir dir="${documentation}"/>
+      <javadoc destdir="${documentation}" sourcepath="${java}"
+               classpathref="javadocs-classpath">
+         <package name="org.*"/>
+      </javadoc>
+   </target>
+
+   <target name="modules" depends=
+   	  "testdatabase, fieldcenter, exportmanager, httpreceiver, manifest, dicomeditor, filesender, decipher, keymaker, auditlogger, httptest"/>
+
+   <target name="quick" depends=
+      "clean-but-keep-javadocs, modules"/>
+
+   <target name="all" depends=
+      "clean, modules, javadocs"/>
+
+</project>

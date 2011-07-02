@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!DOCTYPE storage [
+   <!ENTITY siteurl         "http://192.168.0.98:8080">
+   <!ENTITY servletname     "mircstorage">
+   <!ENTITY docauthoring    "yes">
+   <!ENTITY authorindex     "yes">
+   <!ENTITY docsubmission   "yes">
+   <!ENTITY maxsize         "100">
+   <!ENTITY autoindex       "yes">
+   <!ENTITY zipsubmission   "yes">
+   <!ENTITY zipmaxsize      "100">
+   <!ENTITY zipautoindex    "yes">
+   <!ENTITY doclog          "no">
+   <!ENTITY philog          "yes">
+   <!ENTITY philogexport    "no">
+   <!ENTITY philogexporturl "">
+   <!ENTITY dicomenable     "no">
+   <!ENTITY tceenable       "no">
+   <!ENTITY jpegquality		"-1">
+   <!ENTITY tagline         "">
+   <!ENTITY sitename        "Storage Service">
+   <!ENTITY querymode		"open">
+   <!ENTITY orderby			"lmdate">
+   <!ENTITY ddtimeout		"0">
+   <!ENTITY doctimeout		"0">
+   <!ENTITY version         "00"> ]>
+
+<storage>
+
+  <service docbase="&siteurl;/&servletname;/"
+           querymode="&querymode;"
+           orderby="&orderby;"
+           ddtimeout="&ddtimeout;"
+           jpegquality="&jpegquality;"
+           version="&version;" />
+
+  <doc-access-log enabled="&doclog;"/>
+
+  <phi-access-log enabled="&philog;"
+                  export="&philogexport;"
+                  url="&philogexporturl;"/>
+
+  <tagline>&tagline;</tagline>
+
+  <sitename>&sitename;</sitename>
+
+  <submit-service>
+    <doc enabled="&docsubmission;"
+         maxsize="&maxsize;"
+         autoindex="&autoindex;"/>
+    <zip enabled="&zipsubmission;"
+         maxsize="&zipmaxsize;"
+         autoindex="&zipautoindex;"/>
+  </submit-service>
+
+  <author-service enabled="&docauthoring;" autoindex="&authorindex;">
+
+    <template name="templates/doc-template-mstf2.xml">
+      Simple Teaching File Template
+    </template>
+    <template name="templates/doc-template-mstf3.xml">
+      Simple Teaching File Template for Boards Preparation - dark background
+    </template>
+    <template name="templates/doc-template-mstf4.xml">
+      Simple Teaching File Template for Boards Preparation - light background
+    </template>
+    <template name="templates/doc-template-mstf.xml">
+      Standard Teaching File Template
+    </template>
+    <template name="templates/doc-template-page.xml">
+      Page-format Document Template
+    </template>
+    <template name="templates/doc-template-tab.xml">
+      Tab-format Document Template
+    </template>
+    <template name="templates/doc-template-tab2.xml">
+      Tab-format Document Template with Special Image Section
+    </template>
+    <template name="templates/doc-template-tab3.xml">
+      Simple Tab-format Document Template for Boards Preparation
+    </template>
+ </author-service>
+
+ <dicom-service enabled="&dicomenable;"/>
+ <tce-service enabled="&tceenable;"/>
+
+</storage>

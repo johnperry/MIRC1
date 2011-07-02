@@ -1,0 +1,249 @@
+<html>
+	<head>
+		<title>DicomEditor Help</title>
+	</head>
+	<body>
+		<center><h1>DicomEditor Help</h1></center>
+		DicomEditor is a stand-alone DICOM viewer, DICOM image editor,
+		and general MIRC anonymizer that supports supports both DICOM images
+		and XML metadata files. Each type of file is processed by a separate
+		anonymizer that is controlled by its own script file. The DICOM
+		anonymizer scripts can be edited directly as described in "The DICOM Anonymizer
+		Tab" below. The XML anonymizer script must be constructed separately
+		as described in the "The XML Anonymizer" below.
+		<p>On a Windows machine, you can run it by double-clicking it or by
+		launching a command window, navigating to the DicomEditor directory,
+		and typing:
+		<center><code>java -jar DicomEditor.jar</code></center>
+		<p>If the anonymizer reports errors that are not obvious from the
+		results reported in the Results pane, you may get additional information
+		by running it under a command window.
+
+		<h2>The Directory Tab</h2>
+		The Directory tab allows navigation through the files on the computer.
+		<p>The pulldown menu in the upper right of the Directory pane allows
+		selection of the file system root that will be displayed in the
+		directory tree.
+		<p>The button in the lower right of the Directory pane displays a dialog
+		that allows selection of the file extensions which will be displayed
+		in the directory tree. If the list of extensions includes an asterisk,
+		all files will be displayed.
+		<p>The Anonymize button starts the anonymization
+		process. Which files are processed depends on whether a file or a directory is selected
+		in the tree and on whether the Include Subdirectories checkbox
+		is selected:
+		<ul>
+		<li>If a single file is selected, that file is processed.</li>
+		<li>If a directory is selected and the Include Subdirectories checkbox is
+		not selected, all the files in the selected directory are processed, but no
+		files in subdirectories are processed.</li>
+		<li>If a directory is selected and the Include Subdirectories checkbox is
+		selected, all the files in the selected directory and all its subdirectories
+		are processed.</li>
+		</ul>
+		<p>The Change Names of Anonymized Files checkbox determines whether the anonymization
+		process modifies the file or instead creates a new file with "-no-phi" appended to the name.
+		<p>If Change Names of Anonymized Files is selected, the anonymizer will not anonymize
+		files whose names end in "-no-phi". To anonymize those files, you must deselect the checkbox.
+		<p>If Change Names of Anonymized Files is selected AND Use SOPIUID for name is selected,
+		the anonymizer will not use the "-no-phi" suffix, but will instead rename the anonymized
+		file to the SOP Instance UID of the anonymized object.
+		<p>If Force IVR-LE syntax is checked, the transfer syntax of the anonymized file is forced to
+		implicit VR little endian.
+		<p>If UseSOPIUID for name is checked, anonymized DICOM files will be named to
+		their SOPInstanceUID values followed by ".dcm".
+		<p><b>Important Note:</b> The program anonymizes in the event thread, so
+		there is no way to stop it while it is running except to kill the program. Thus, you
+		should be careful when selecting the Include Subdirectories checkbox.
+		<p>Events that occur during the anonymization process are logged in the Results pane.
+		<p> The Fix DICOM button works on the same set of files as the Anonymize button, but instead of
+		anonymization, it only corrects any elements in the DICOM object which have incorrect VRs. If
+		Force IVR-LE syntax is selected, it also forces the transfer syntax. This function always
+		overwrites the original file, and renaming is not performed.
+		<p>If you are testing with a central remapper, click the Set Remapper URL button and set its URL, then click the Enable remote remapper box. This box is not selectable unless there is a non-blank value in the URL.
+
+		<h2>The DICOM Viewer Tab</h2>
+		The DICOM Viewer tab displays a DICOM image along with its metadata. Certain elements in the
+		metadata (most of the ones that are textual) are editable.
+		<p>To open a DICOM file, click on the Open button and use the file chooser to navigate to the
+		desired file. The file chooser will point to the same directory that is currently open
+		in the Directory tab unless you have an image open in the viewer and have navigated to a different
+		directory.
+		<p>To close the currently open image, click the Close button.
+		<p>To edit an element, click on its (group,element) designation. A dialog box will appear
+		allowing you to change the value of the element.
+		<p>If you have changed an element, the Save and Save All buttons will be enabled. Save only saves the
+		changes made to the current image. Save All applies the changes to all the
+		images with the same StudyInstanceUID in the current directory.
+		<p>An element designation displayed in red is one that could cause the anonymizer to call its quarantine
+		function and leave the image untouched. If you anonymize an image and the Results pane shows that
+		the anonymizer called the
+		quarantine function, look at the values in the red elements and see if there is something wrong.
+		<p>To save a JPEG version of the currently displayed image, click the Save As JPEG button. A dialog
+		box will appear allowing you to specify the maximum width of the saved image. The actual width of the
+		saved image will be the minimum of the width of the DICOM image and the maximum width you specify.
+		The height will be scaled to maintain the aspect ratio.
+
+		<h2>The DICOM Anonymizer Tab</h2>
+		The DICOM Anonymizer tab displays the DICOM anonymizer scripts. You can edit the scripts and click the Save button.
+		Changes are not effective until the scripts are saved. If you make a change and decide you made an error
+		before saving, click the Reset button and the scripts will be refreshed from the last saved version.
+		<p>The script functions are documented in "How to Configure the Anonymizer for MIRC Clinical Trial Services",
+		which is available on the RSNA MIRC site (http://mirc.rsna.org). Click the Downloads link in the header and
+		scroll down to the list of documents for administrators.
+		<p>The following is a list of the functions for quick reference:
+		<ul>
+		<li>@contents(ElementName)</li>
+		<li>@contents(ElementName,"regex")</li>
+		<li>@contents(ElementName,"regex","replacement")</li>
+		<li>@require()</li>
+		<li>@require(ElementName)</li>
+		<li>@require(ElementName,"default value")</li>
+		<li>@param(@ParameterName)</li>
+		<li>@initials(ElementName)</li>
+		<li>@scramble(ElementName,word1skip,word1take,word2skip,word2take,...)</li>
+		<li>@alphabetichash(ElementName,maxCharsOutput)</li>
+		<li>@alphabetichash(ElementName,maxCharsOutput,maxWordsInput)</li>
+		<li>@numerichash(ElementName,maxCharsOutput)</li>
+		<li>@numerichash(ElementName,maxCharsOutput,maxWordsInput)</li>
+		<li>@date(separator)</li>
+		<li>@time(separator)</li>
+		<li>@empty()</li>
+		<li>@blank(n)</li>
+		<li>@remove()</li>
+		<li>@keep()</li>
+		<li>@uid(root,ElementName)</li>
+		<li>@uid(@UIDROOT,ElementName)</li>
+		<li>@hashuid(root,ElementName)</li>
+		<li>@hashuid(@UIDROOT,ElementName)</li>
+		<li>@ptid(siteid,ElementName,prefix,first,width,suffix)</li>
+		<li>@ptid(@SITEID,ElementName,@PREFIX,first,width,@SUFFIX)</li>
+		<li>@hashptid(siteid,ElementName,prefix,suffix)</li>
+		<li>@hashptid(@SITEID,ElementName,@PREFIX,@SUFFIX)</li>
+		<li>@accession(ElementName)</li>
+		<li>@id(ElementName)</li>
+		<li>@integer()</li>
+		<li>@offsetdate(siteid,ElementName,basedate)</li>
+		<li>@offsetdate(@SITEID,ElementName,@BASEDATE)</li>
+		<li>@incrementdate(ElementName,incInDays)</li>
+		<li>@round(ElementName,groupsize)</li>
+		<li>@round(ElementName,@ParameterName)</li>
+		<li>@if(ElementName,exists){true clause}{false clause}</li>
+		<li>@if(ElementName,isblank){true clause}{false clause}</li>
+		<li>@if(ElementName,matches,"regex"){true clause}{false clause}</li>
+		<li>@quarantine()</li>
+		<li>@skip()</li>
+		</ul>
+		The keyword <b>this</b> may be used in place of an ElementName to
+		indicate the element whose replacement is being constructed.
+
+		<h2>The XML Anonymizer</h2>
+		The XML anonymizer is driven by a script file called "xml-anonymizer.script" located in
+		the same directory where the DicomEditor program is stored. This file is not delivered
+		as part of the installation, so you must construct it yourself using any text editor
+		(e.g., TextPad). Because XML is very general, the script language is different from
+		that of the DICOM anonymizer. It is also different in order to make it look XPath-like
+		for the benefit of XSL wizards.
+
+		<p>The following is a quick reference for the scripting language. There are three types
+		of commands. Each starts on the first character of a line. Each
+		is indicated by a specific starting character. A line not starting with one of the three
+		command-start characters is appended to the preceeding line.
+
+		<ul>
+		<li>Any line starting with a '#' character is a comment line.</li>
+		<li>A line starting with an identifier is an assignment command. An identifier always starts
+		with a '$' and is immediately followed by a name, for example, "$UID".</li>
+		<li>A line starting with a '/' character is a path assignment command. Paths are XPath-like
+		expressions, always starting from the root element.</li>
+		</ul>
+
+		<p>Here are some examples of paths:
+		<ul>
+		<li>/MIRCdocument/authorization/owner refers the "owner" child element of an authorization
+		element in an XML document whose root element is "MIRCdocument".</li>
+		<li>/MIRCdocument/@display refers to the "display" attribute of an XML document whose
+		root element is "MIRCdocument".</li>
+		<li>/*/* refers to any second-generation child element of an XML document, no matter what
+		its root element is named.</li>
+		<li>/*//owner refers to any "owner" element in an XML document, no matter what its root
+		element is named.</li>
+		<li>/message/segment[3] refers to the fourth (always count from zero) "segment" element in an
+		XML document whose root element is "message".
+		</li>
+		</ul>
+
+		<p>If no bracketed qualifier is present in a path segment, the first element matching the
+		segment name is selected. If all elements matching the segment name are to be selected, use
+		the "[*]" wildcard qualifier, e.g. /root/element[*].
+
+		<p>Assignment statements are of two types:
+		<ul>
+		<li>$name = expression</li>
+		<li>/path = expression</li>
+		</ul>
+		In a $name assignment, an expression can be any combination of literals
+		(quoted strings, e.g. "some text"), paths, and other names. For an path
+		assignment,an expression can be any combination of literals,
+		paths, names, or function calls. There are three functions:
+		<ul>
+		<li>$require( <em>expression</em> ) forces the creation of the element or attribute
+		identified by the path on the left side of the assignment, including all necessary
+		parent elements. The value assigned to the element or attribute is the value
+		of expression argument of the $require function.</li>
+		<li>$remove() causes the element or attribute identified by the path on the left
+		side of the assignment to be removed from the document.</li>
+		<li>$uid( <em>expression</em> ) causes the value of the element to be remapped
+		using the value of the expression as the new UID's root. The UID remapping function
+		uses the same UID remapping table as is used by the DICOM anonymizer, allowing
+		UIDs to be remapped while preserving the relationships between DICOM and XML objects.</li>
+		</ul>
+
+		<p>Here is an example script for remapping UIDs of two different types in XML
+		files whose root elements are called LidcReadMessage:
+		<pre>
+		$UIDROOT = "1.2.3.4"
+		/LidcReadMessage/ResponseHeader/SeriesInstanceUid = $uid($UIDROOT)
+		/LidcReadMessage//imageSOP_UID = $uid($UIDROOT)
+		</pre>
+		Here is an example script for doing the same work as above but at the same
+		time renaming the "SeriesInstanceUid" element to "SeriesInstanceUID":
+		<pre>
+		$UIDROOT = "1.2.3.4"
+		/LidcReadMessage/ResponseHeader/SeriesInstanceUid = $uid($UIDROOT)
+		$temp = /LidcReadMessage/ResponseHeader/SeriesInstanceUid
+		/LidcReadMessage/ResponseHeader/SeriesInstanceUID = $require($temp)
+		/LidcReadMessage/ResponseHeader/SeriesInstanceUid = $remove()
+		/LidcReadMessage//imageSOP_UID = $uid($UIDROOT)
+		</pre>
+		To assist in debugging XML anonymizer scripts, there is a special name assignment
+		command:
+		<pre>
+		$print = <em>expression</em>
+		</pre>
+		This causes the value of the expression to be printed on the console. If you are running
+		DicomEditor on a Windows system and want to use this feature, you should launch the program
+		from a command window as described at the top of this page.
+
+		<h2>The Encryption Key</h2>
+		The re-identification system which is part of the anonymizer encrypts
+		the keys in its database to make it more difficult for a hacker to acquire
+		protected health information. The encryption key is a string of text that
+		can be thought of as a password. You have the option to define your own key
+		or to use a default key that is stored in the program. A good key is about
+		20 characters long, not counting any spaces.
+		<p>
+		When the program starts, if it finds an existing re-identification database
+		it checks to see whether the key to the database is the default. If it is not,
+		it prompts the user for the key.
+		<p>
+		If your system is on a secure network, then using the default key may be
+		more convenient, since the prompt is suppressed. If your system is in a
+		less secure place, you should define your own key the first time the program
+		is run. Once the key for a database is defined, it cannot be changed. To
+		start a new re-identification database, you must remove the idtable.properties
+		file from the DicomEditor directory and restart the program, causing it to
+		create a new database and request a key the next time it runs.
+
+	</body>
+</html>

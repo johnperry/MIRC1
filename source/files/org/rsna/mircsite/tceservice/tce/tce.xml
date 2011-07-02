@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<tce-service
+	autostart="no"
+	autocreate="no"
+	password="password"
+	roles="">
+
+  <dicom-store>
+    <ae-title>TCE</ae-title>
+    <port>3330</port>
+    <anonymize>no</anonymize>
+  </dicom-store>
+
+</tce-service>

@@ -1,0 +1,112 @@
+<html>
+	<head>
+		<title>ExportManager Help</title>
+	</head>
+	<body>
+		<center><h1>ExportManager Help</h1></center>
+		These instructions are for the administrator configuring the program
+		to receive DICOM objects and transmit them to the TCE Receiver.
+
+		<p>ExportManager contains a DICOM Storage SCP. Objects that are received are parsed to determine whether they are TCE manifests or other types of DICOM objects. Objects are stored until all the referenced instances in a manifest have been received, at which time the manifest is queued for further processing. The processing of a manifest typically consists of anonymizing the manifest and all its referenced instances and then queuing the anonymized manifest and instances for export. Anonymization may be enabled or disabled. The order of export - manifest first or last - is also configurable. The program supports export via DICOM, HTTP, or HTTPS. The URLs for the various protocols are specified as in these examples:
+		<ul>
+		<li>dicom://DestinationAET:SourceAET@ipaddress:port</li>
+		<li>http://ipaddress:port/path</li>
+		<li>https://ipaddress:port/path</li>
+		</ul>
+		Note: For the https protocol, be careful to specify the port correctly. Many systems support http and https on different ports. For example, typical Tomcat ports for http and https are 8080 and 8443, respectively.
+
+
+		<h2>Encryption Key</h2>
+		The re-identification system which is part of the anonymizer encrypts the keys in its database to make it more difficult for a hacker to acquire protected health information. The encryption key is a string of text that can be thought of as a password. You have the option to define your own key or to use a default key that is stored in the program. A good key is about 20 characters long, not counting any spaces.
+		<p>
+		When the program starts, if it finds an existing re-identification database it checks to see whether the key to the database is the default. If it is not, it prompts the user for the key. If you are prompted for a key, you can enter it or you can enter a file path preceded by an at-sign in place of the key, If the program detects a file path, it will obtain the key from the specified file. When using this process, it is best to put the key file on a removable device which is inserted in the system before the program is started and removed after the program has obtained the key.
+		<p>
+		If your system is on a secure network, then using the default key may be more convenient, since the prompt is suppressed. If your system is in a less secure place, you should define your own key the first time the program is run. Once the key for a database is defined, it cannot be changed without losing all the data currently in the table. To start a new re-identification database, you must remove the idtable.properties file from the ExportManager directory and restart the program, causing it to create a new database and request a key.
+		<p>
+		Note that in trials that use central remapping, where the re-identification database is stored at the principal investigator's site, the local database is not used and the key is not required.
+
+
+		<h2>Control Panel</h2>
+		The Control Panel tab provides access to all the configurable program parameters.
+		<ul>
+		<li>Set the destination URL to point to the TCE Receiver.</li>
+		<li>If you want to change the port number or the AE Title of the DICOM Storage SCP, change the corresponding fields.</li>
+		<li>Ensure that the anonymizer is enabled.</li>
+		<li>Ensure that exporting is enabled.</li>
+		<li>If you want to be able to access Event Log and Queue status information with a browser, set the port number and check the box to enable the HTTP Server.
+		<li>When you are done making changes, click the Save Changes button.
+		Changes do not become active until they are saved.</li>
+		</ul>
+
+
+		<h2>Anonymizer Configuration</h2>
+		The anonymizer is highly programmable. If you want to change its actions,
+		read "The MIRC DICOM Anonymizer" article on the MIRC Wiki (http://mircwiki.rsna.org).
+		<p>To configure the anonymizer, click the Anonymizer tab and enter the script instructions in any of the text fields on the right side of the page. Each DICOM element has its own script field. The script language is explained in the atricle mentioned above. When you are done, be sure to click the Save Changes button at the bottom of the window.
+		<p>The following is a list of the functions for quick reference:
+		<ul>
+		<li>@contents(ElementName)</li>
+		<li>@contents(ElementName,"regex")</li>
+		<li>@contents(ElementName,"regex","replacement")</li>
+		<li>@require()</li>
+		<li>@require(ElementName)</li>
+		<li>@require(ElementName,"default value")</li>
+		<li>@param(@ParameterName)</li>
+		<li>@initials(ElementName)</li>
+		<li>@scramble(ElementName,word1skip,word1take,word2skip,word2take,...)</li>
+		<li>@alphabetichash(ElementName,maxCharsOutput)</li>
+		<li>@alphabetichash(ElementName,maxCharsOutput,maxWordsInput)</li>
+		<li>@numerichash(ElementName,maxCharsOutput)</li>
+		<li>@numerichash(ElementName,maxCharsOutput,maxWordsInput)</li>
+		<li>@date(separator)</li>
+		<li>@time(separator)</li>
+		<li>@empty()</li>
+		<li>@blank(n)</li>
+		<li>@remove()</li>
+		<li>@keep()</li>
+		<li>@uid(root,ElementName)</li>
+		<li>@uid(@UIDROOT,ElementName)</li>
+		<li>@hashuid(root,ElementName)</li>
+		<li>@hashuid(@UIDROOT,ElementName)</li>
+		<li>@ptid(siteid,ElementName,prefix,first,width,suffix)</li>
+		<li>@ptid(@SITEID,ElementName,@PREFIX,first,width,@SUFFIX)</li>
+		<li>@hashptid(siteid,ElementName,prefix,suffix)</li>
+		<li>@hashptid(@SITEID,ElementName,@PREFIX,@SUFFIX)</li>
+		<li>@accession(ElementName)</li>
+		<li>@id(ElementName)</li>
+		<li>@integer()</li>
+		<li>@offsetdate(siteid,ElementName,basedate)</li>
+		<li>@offsetdate(@SITEID,ElementName,@BASEDATE)</li>
+		<li>@incrementdate(ElementName,incInDays)</li>
+		<li>@round(ElementName,groupsize)</li>
+		<li>@round(ElementName,@ParameterName)</li>
+		<li>@if(ElementName,exists){true clause}{false clause}</li>
+		<li>@if(ElementName,isblank){true clause}{false clause}</li>
+		<li>@if(ElementName,matches,"regex"){true clause}{false clause}</li>
+		<li>@quarantine()</li>
+		<li>@skip()</li>
+		</ul>
+		The keyword <b>this</b> may be used in place of an ElementName to
+		indicate the element whose replacement is being constructed.
+
+		<h2>Quarantine</h2>
+		When a failure occurs while anonymizing or transmitting a DICOM object, the object is placed in
+		a quarantine. ExportManager provides two quarantines: one for the anonymizer and one for the export service. No further processing of a quarantined object will occur without manual intervention. The Queues tab lists the number of objects in the quarantines. If objects accumulate there, you should look into the reasons why. The Quarantine tab provides a way to look at the DICOM elements of an object.
+
+		<h2>Proxy Server</h2>
+		The program is preconfigured <b>not</b> to go through a proxy server when establishing a connection. If your destination is on the internet and your site is connected to the internet through a proxy server, take these steps:
+		<ol>
+		<li>Click the Control Panel tab, then click the Proxy Server tab.</li>
+		<li>Check the box enabling the proxy server.</li>
+		<li>Enter the IP address or domain name of your proxy server in the Proxy Server IP Address field.
+		<li>Enter the port number of your proxy server in the Proxy Server Port field.
+		<li>If your proxy server requires authentication, enter the username and password in their respective fields. (Most proxy servers do not require authentication.)</li>
+		<li>Click the Save button at the bottom of the page and test image transmission again.
+		</ol>
+		When the program fails to make a connection, it assumes that the network or destination has a problem and waits 10 minutes before trying again. If you don't want to wait, you can exit the program and start it again.
+
+		<h2>Query/Retrieve</h2>
+		The DICOM Query/Retrieve SCU function is not implemented in this release. Its intended function is to allow TCE Export Selectors to send a manifest only and have the Export Manager retrieve all the selected instances. The "Q/R SCU & SCP" tab in the Control Panel will allow you to enable this feature and to configure the AE Title, IP address, and port of the Q/R SCP that should be queried.
+
+	</body>
+</html>

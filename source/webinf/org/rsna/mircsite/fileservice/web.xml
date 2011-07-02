@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd"
+  [
+    <!ENTITY user    "FS-user">
+    <!ENTITY admin   "FS-admin">
+    <!ENTITY tomcat  "admin">
+  ]>
+
+<web-app>
+
+  <servlet>
+    <servlet-name> FileService </servlet-name>
+    <servlet-class> org.rsna.mircsite.fileservice.FileService </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name> LoginService </servlet-name>
+    <servlet-class> org.rsna.mircsite.mircservlets.LoginService </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name> AdminService </servlet-name>
+    <servlet-class> org.rsna.mircsite.fileservice.AdminService </servlet-class>
+    <load-on-startup> 1 </load-on-startup>
+  </servlet>
+
+  <servlet>
+    <servlet-name> AnonymizerConfigurator </servlet-name>
+    <servlet-class> org.rsna.mircsite.mircservlets.AnonymizerUtil </servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name> FileService </servlet-name>
+    <url-pattern> /service/* </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> FileService </servlet-name>
+    <url-pattern> /users/* </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> FileService </servlet-name>
+    <url-pattern> /dept/* </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> LoginService </servlet-name>
+    <url-pattern> /login </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> AdminService </servlet-name>
+    <url-pattern> /admin </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> AnonymizerConfigurator </servlet-name>
+    <url-pattern> /admin/anconfig </url-pattern>
+  </servlet-mapping>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name> File Service </web-resource-name>
+      <url-pattern> /service </url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name> &user; </role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name> File Service </web-resource-name>
+      <url-pattern> /users/* </url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name> &user; </role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name> File Service </web-resource-name>
+      <url-pattern> /dept/* </url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name> &user; </role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name> Login Service </web-resource-name>
+      <url-pattern> /login </url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name> &user; </role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name> Admin Service </web-resource-name>
+      <url-pattern> /admin </url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name> &tomcat; </role-name>
+      <role-name> &admin; </role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name> Anonymizer Configurator </web-resource-name>
+      <url-pattern> /admin/anconfig </url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name> &tomcat; </role-name>
+      <role-name> &admin; </role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <login-config>
+    <auth-method> BASIC </auth-method>
+    <realm-name> File Cabinet </realm-name>
+  </login-config>
+
+  <security-role>
+    <description> File Cabinet </description>
+    <role-name> &user; </role-name>
+  </security-role>
+
+  <security-role>
+    <description> File Service Administrator </description>
+    <role-name> &admin; </role-name>
+  </security-role>
+
+  <security-role>
+    <description> Tomcat Administrator </description>
+    <role-name> &tomcat; </role-name>
+  </security-role>
+
+</web-app>

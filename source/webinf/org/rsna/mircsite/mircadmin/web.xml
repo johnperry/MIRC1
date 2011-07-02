@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd"
+  [
+    <!ENTITY tomcat    "admin">
+  ]>
+
+<web-app>
+
+  <servlet>
+    <servlet-name> LogViewer </servlet-name>
+    <servlet-class> org.rsna.mircsite.mircadmin.LogViewer </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name> UserRoleManager </servlet-name>
+    <servlet-class> org.rsna.mircsite.mircadmin.UserRoleManager </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name> UserAccountManager </servlet-name>
+    <servlet-class> org.rsna.mircsite.mircadmin.UserAccountManager </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name> Controller </servlet-name>
+    <servlet-class> org.rsna.mircsite.mircadmin.Controller </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name> SysProps </servlet-name>
+    <servlet-class> org.rsna.mircsite.mircadmin.SysProps </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name> CookieService </servlet-name>
+    <servlet-class> org.rsna.mircsite.mircadmin.CookieService </servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name> LogViewer </servlet-name>
+    <url-pattern> /logviewer/* </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> UserRoleManager </servlet-name>
+    <url-pattern> /users </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> UserAccountManager </servlet-name>
+    <url-pattern> /user </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> Controller </servlet-name>
+    <url-pattern> /controller </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> SysProps </servlet-name>
+    <url-pattern> /sysprops </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> CookieService </servlet-name>
+    <url-pattern> /cookies/* </url-pattern>
+  </servlet-mapping>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name> MIRC Admin </web-resource-name>
+      <url-pattern> /users </url-pattern>
+      <url-pattern> /controller </url-pattern>
+      <url-pattern> /cookies/* </url-pattern>
+      <url-pattern> /logviewer/* </url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name> &tomcat; </role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <login-config>
+    <auth-method> BASIC </auth-method>
+    <realm-name> Storage Service </realm-name>
+  </login-config>
+
+  <security-role>
+    <description> MIRC Administrator </description>
+    <role-name> &tomcat; </role-name>
+  </security-role>
+
+</web-app>

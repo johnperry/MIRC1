@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+
+	<servlet>
+		<servlet-name> StorageService </servlet-name>
+		<servlet-class> org.rsna.mircsite.testservice.StorageService </servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name> StorageService </servlet-name>
+		<url-pattern> / </url-pattern>
+	</servlet-mapping>
+
+</web-app>

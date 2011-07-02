@@ -1,0 +1,284 @@
+<html>
+	<head>
+		<title>TRIAL FieldCenter Help</title>
+	</head>
+	<body>
+		<center><h1>FieldCenter Help</h1></center>
+		<h2>Configuration Instructions</h2>
+		These instructions are for the administrator configuring the program
+		for transmitting images to the TRIAL principal investigator site.
+		<h3>Configure the Anonymizer</h3>
+			Click the "Anonymizer" tab.
+			<p>The TRIAL parameter should be the name of your clinical trial.
+			<p>The SITENAME parameter should be the name of your site.
+			<p>The SITEID parameter should be configured from the following table:
+			<center>
+			<table width=30%>
+				<tr><th>Site</th><th>SITEID</th></tr>
+				<tr><td align=center>Hospital</td>	<td align=center>ID-Hospital</td></tr>
+			</table>
+			</center>
+			<p>The rest of the Anonymizer configuration is set correctly for the trial. If you need to make changes, see the Anonymizer Configuration Details section below.
+
+		<h3>Configure the Control Panel</h3>
+			Click the "Control Panel" tab. A second row of tabs will be displayed allowing you to configure the various functions of the program.
+			<p>On the "Trial" tab, examine the Destination URL field. If your site can make a Secure Sockets Layer outbound connection on port 8443,
+			the destination field is correct.
+			<p>If it can't, remove the 's' in "https" and change "8443" to "8080".
+			<p>If you aren't sure, there is no harm in trying the SSL connection first.
+			If it doesn't work, you can return to the Control Panel and change it later.
+			<p>Ensure that exporting is enabled.
+			<p>On the "DICOM SCP" tab, examine the "DICOM SCP Port" and "DICOM SCP AE Title" fields and change them if necessary. In most situations, the values will be fine. If someother application on your computer is using the selected port, the DICOM SCP will fail to start and an error will be reported in the "Event Log" tab. In that situation, you will have to change the port number.
+			<p>On the Control Panel's "Anonymizer" tab, ensure that the anonymizer is enabled.
+			<p>If your trial is using central remapping, check the "Central Remapper enabled" box and enter the URL of the Central Remapper in the field below it. If you are using HTTP to communicate with the Central Remapper, the URL will typically have the form http://ipaddress:8080/storageservicename/remap. If you are using HTTPS, the URL will have the form https://ipaddress:8443/storageservicename/remap.
+			<p>"Anonymizer force IVRLE" should be unchecked unless directed by the trial administrator at the principal investigator site.
+			<p>When you are done making changes, be sure to click the "Save Changes" button.
+			Changes do not become active until they are saved.
+
+
+		<h3>Test Image Transmission</h3>
+			Click the "Parameters" tab and note the Local DICOM Store parameters.
+			<p>Using those parameters, configure a DICOM modality or PACS workstation and
+			send some images.
+			<p>Click the "Event Log" tab and see what happened.
+			<p>Click the "Queue Status" tab and verify that all the queues and the quarantine are empty.
+			<p>If images are in the Awaiting Export queue, check the log and see if it is because a connection
+			could not be made. If it couldn't, two possibilities should be tested. The simplest test is to
+			see if you can connect using HTTP rather than HTTPS as described in the section above.
+			If that also fails, it is possible that your computer is behind a proxy server that
+			does not allow direct outbound connections. If that might be the case, read the section below
+			on configuring FieldCenter to use a proxy server.
+			<p>If images are quarantined, read the section below on using the quarantine.
+
+
+		<h2>The Encryption Key</h2>
+		The re-identification system which is part of the anonymizer encrypts the keys in its database to make it more difficult for a hacker to acquire protected health information. The encryption key is a string of text that can be thought of as a password. You have the option to define your own key or to use a default key that is stored in the program. A good key is about 20 characters long, not counting any spaces.
+		<p>
+		When the program starts, it looks for an existing re-identification database. If it finds one, it checks to see whether the key to the database is the default. If it is not, it prompts the user for the key.
+		<p>
+		If your system is on a secure network, then using the default key may be convenient because the prompt is suppressed. If your system is in a less secure place, you should define your own key the first time the program is run. Once the key for a database is defined, it cannot be changed. To start a new re-identification database, you must remove the idtable.properties file from the FieldCenter directory and restart the program, causing it to create a new database and request a key the next time it runs.
+
+		<h2>Using the Quarantine</h2>
+		When a failure occurs while anonymizing or transmitting a DICOM object, the object is placed in
+		the quarantine.
+		No further processing of such an object will occur without manual intervention.
+		<p>If objects have
+		accumulated in the quarantine, click the "Quarantine" tab, click the "Open" button, and open an object.
+		The image and all its DICOM elements will be displayed.
+		<p>You can send the currently opened image from the quarantine by clicking the "Send" button.
+		<p>You can send all the quarantined images from the same study as the currently opened image
+		by clicking the "Send All" button.
+		<p>You can also use the "Quarantine" tab to edit the contents of certain DICOM elements in the object. In trials where the anonymizer checks certain elements to determine their validity, it can quarantine an object that has missing or incorrectly formed values in those elements. If you click on the DICOM element number in the right pane of the Quarantine display, you can change the value of the element.
+		<p>If you have made changes to any elements in an image and you wish to save them in the image, click the "Save" button. If you wish to propagate those changes through all the images in that patient's study, click the "Save All" button.
+		<p>A typical use for this function is in correcting a missing or improperly formatted patient ID. For example, suppose the TRIAL patient ID starts with at least six numeric digits and the patient ID is placed in the Study Comments element by the modality operator. If the anonymizer finds that the element is missing or the first six characters are not numeric, it quarantines the image. By opening the image in the "Quarantine" tab, you can review the DICOM elements and edit them. The display highlights in red all the elements that could have resulted in the quarantine. After placing the correct ID in the Study Comments field, you can click the "Save All" button and correct all the images in the study. Then you can send them all by clicking the "Send All" button.
+
+		<h2>Using the Selector</h2>
+		The FieldCenter application is designed for unattended operation under normal circumstances, where other applications transmit objects to FieldCenter for processing and export. If manual selection of local objects is necessary, the Selector tab can be used to navigate local directories and select objects for processing. The Selector has a Directory pane on the left for selecting individual objects or directories to search, and a right pane for choosing object types to accept and for reporting results.
+
+		<ul>
+		<li>The pulldown menu in the upper right of the Directory pane allows
+		selection of the file system root that will be displayed in the
+		directory tree.
+		<li>The button in the lower right of the Directory pane displays a dialog
+		that allows selection of the file extensions which will be displayed in the directory tree. Extensions must be separated by commas, as in ".dcm,.xml". If the list of extensions includes an asterisk, all files will be displayed.
+		</ul>
+		<p>The checkboxes in the lower left side of the right pane allow selection of the object types that will be accepted for queuing.
+		<p>The Queue button triggers a search for acceptable object types. Which files are selected depends on whether a file or a directory is selected in the tree and on whether the Include Subdirectories checkbox is selected in the lower left of the Directory pane:
+		<ul>
+		<li>If a single file is selected, that file is processed.</li>
+		<li>If a directory is selected and the Include Subdirectories checkbox is
+		not selected, all the files in the selected directory are processed, but no
+		files in subdirectories are processed.</li>
+		<li>If a directory is selected and the Include Subdirectories checkbox is
+		selected, all the files in the selected directory and all its subdirectories
+		are processed.</li>
+		</ul>
+		<p>Selected objects are entered into queues depending on their type:
+		<ul>
+		<li>DicomObjects are entered into the DICOM import queue as if they had been received by the DICOM Storage SCP.  These objects are processed (anonymized and exported, depending on the configuration) by the ObjectProcessor along with any other DicomObjects.
+		<li>XmlObjects are entered into the HTTP import queue as if they had been received by the HTTP Receiver. These objects are processed (anonymized and exported, depending on the configuration) by the ObjectProcessor along with any other XmlObjects.
+		<li>ZipObjects are entered into the export queue for transmission to the destination HttpImportService for processing at the principal investigator's MIRC site.
+		<li>FileObjects are files of any type that does not match one of the object types above. They are entered into the export queue. Enabling selection of this object type should be done only in special circumstances. (These objects are not required to contain study instance iinformation. MIRC sites receiving these object types pass them to their DatabaseExportService's DatabaseAdapter, which is responsible for interpreting them.)
+		</ul>
+		<p>Queuing events that occur during the search are logged in the upper part of the right pane.
+		<p><b>Notes:</b> In order to handle large  objects like zip files of more than 100MB, the program requires more than the default memory allocation. To provide that memory, start the program from a command line as follows:
+		<ul><li>java -Xmx512m -Xms256m -jar FieldCenter.jar</li></ul>
+		For object sizes greater than 400MB, allocate even more memory, as follows:
+		<ul><li>java -Xmx1024m -Xms512m -jar FileSender.jar</li></ul>
+		The <b>mx</b> parameter specifies the maximum size in MB of the memory pool (also called the heap space), and the <b>ms</b> parameter specifies the starting size of the memory pool.
+
+		<h2>Configuring FieldCenter to Use a Proxy Server</h2>
+		The FieldCenter program is preconfigured not to go through a proxy server when establishing a connection to the principal investigator site. If your site is connected to the internet through a proxy server, take these steps:
+		<ol>
+		<li>Click the "Control Panel" tab.</li>
+		<li>Click the "Proxy" tab.</li>
+		<li>Check the box enabling the proxy server.</li>
+		<li>Enter the IP address or domain name of your proxy server in the "Proxy Server IP Address" field.</li>
+		<li>Enter the port number of your proxy server in the "Proxy Server Port" field.</li>
+		<li>If your proxy server requires authentication, enter the username and password in their respective fields. (Most proxy servers to not require authentication.)</li>
+		<li>Click the Save button at the bottom of the page and test image transmission again.</li>
+		</ol>
+		When FieldCenter fails to make a connection, it assumes that the network or destination has a problem and waits 10 minutes before trying again. If you don't want to wait, you can exit the program and start it again.
+
+
+		<h2>Configuring FieldCenter to Use an Update Server</h2>
+		An update server is a central repository for configuration files and software releases, providing automatic backups of critical information, including the anonymizer scripts and the encrypted remapping database. It also provides a convenient method for updating the FieldCenter software.
+		<p>If the principal investigator site in your clinical trial provides an update server, take these steps:
+		<ol>
+		<li>Click the Control Panel tab.</li>
+		<li>Check the box enabling the update server.</li>
+		<li>Enter enter the URL of the update server in the field below it. If you are using HTTP to communicate with the update server, the URL will typically have the form http://ipaddress:8080/storageservicename/update. If you are using HTTPS, the URL will have the form https://ipaddress:8443/storageservicename/update.</li>
+		<li>Obtain the username and password for your site from the principal investigator's trial administrator and enter them in their respective fields.</li>
+		<li>Click the Save button at the bottom of the page.</li>
+		</ol>
+		When FieldCenter fails to make a connection, it assumes that the network or destination has a problem and waits 10 minutes before trying again. If you don't want to wait, you can exit the program and start it again.
+
+
+		<h2>Anonymizer Configuration Details</h2>
+		The anonymizer is highly programmable. If you want to change its actions to meet special IRB rules for your site,
+		read "How to Configure the Anonymizer for MIRC Clinical Trial Services", available on the RSNA
+		MIRC site at http://mirc.rsna.org. Click the "Downloads" button in the page header to go directly
+		to a page with all the MIRC documentation.
+		<p>The Anonymizer tab displays the anonymizer scripts. You can edit the scripts and click the Save button to save your changes. Changes
+		are not effective unless the scripts are saved. If you make a change and decide you made an error
+		before saving, click the Reset button and the scripts will be refreshed from the last saved version.
+		<p>If you change the anonymizer scripts, do not change the contents of the ReferringPhysicianName field. The anonymizer uses this element, which is not used in the trial, to indicate that it has already processed a file.
+
+		<p>The following is a list of the functions for quick reference:
+		<ul>
+		<li>@contents(ElementName)</li>
+		<li>@contents(ElementName,"regex")</li>
+		<li>@contents(ElementName,"regex","replacement")</li>
+		<li>@require()</li>
+		<li>@require(ElementName)</li>
+		<li>@require(ElementName,"default value")</li>
+		<li>@param(@ParameterName)</li>
+		<li>@initials(ElementName)</li>
+		<li>@scramble(ElementName,word1skip,word1take,word2skip,word2take,...)</li>
+		<li>@alphabetichash(ElementName,maxCharsOutput)</li>
+		<li>@alphabetichash(ElementName,maxCharsOutput,maxWordsInput)</li>
+		<li>@numerichash(ElementName,maxCharsOutput)</li>
+		<li>@numerichash(ElementName,maxCharsOutput,maxWordsInput)</li>
+		<li>@date(separator)</li>
+		<li>@time(separator)</li>
+		<li>@empty()</li>
+		<li>@blank(n)</li>
+		<li>@remove()</li>
+		<li>@keep()</li>
+		<li>@uid(root,ElementName)</li>
+		<li>@uid(@UIDROOT,ElementName)</li>
+		<li>@hashuid(root,ElementName)</li>
+		<li>@hashuid(@UIDROOT,ElementName)</li>
+		<li>@ptid(siteid,ElementName,prefix,first,width,suffix)</li>
+		<li>@ptid(@SITEID,ElementName,@PREFIX,first,width,@SUFFIX)</li>
+		<li>@hashptid(siteid,ElementName,prefix,suffix)</li>
+		<li>@hashptid(@SITEID,ElementName,@PREFIX,@SUFFIX)</li>
+		<li>@accession(ElementName)</li>
+		<li>@id(ElementName)</li>
+		<li>@integer()</li>
+		<li>@offsetdate(siteid,ElementName,basedate)</li>
+		<li>@offsetdate(@SITEID,ElementName,@BASEDATE)</li>
+		<li>@incrementdate(ElementName,incInDays)</li>
+		<li>@round(ElementName,groupsize)</li>
+		<li>@round(ElementName,@ParameterName)</li>
+		<li>@if(ElementName,exists){true clause}{false clause}</li>
+		<li>@if(ElementName,isblank){true clause}{false clause}</li>
+		<li>@if(ElementName,matches,"regex"){true clause}{false clause}</li>
+		<li>@quarantine()</li>
+		<li>@skip()</li>
+		</ul>
+		The keyword <b>this</b> may be used in place of an ElementName to
+		indicate the element whose replacement is being constructed.
+
+		<h2>The XML Anonymizer</h2>
+		The XML anonymizer is driven by a script file named "xml-anonymizer.script" located in
+		the same directory where the FieldCenter program is stored. This file is not delivered
+		as part of the installation, so you must construct it yourself using any text editor
+		(e.g., TextPad). Because XML is very general, the script language is different from
+		that of the DICOM anonymizer. It is also different in order to make it look XPath-like
+		for the benefit of XSL wizards.
+
+		<p>The following is a quick reference for the scripting language. There are three types
+		of commands. Each starts on the first character of a line. Each
+		is indicated by a specific starting character. A line not starting with one of the three
+		command-start characters is appended to the preceeding line.
+
+		<ul>
+		<li>Any line starting with a '#' character is a comment line.</li>
+		<li>A line starting with an identifier is an assignment command. An identifier always starts
+		with a '$' and is immediately followed by a name, for example, "$UID".</li>
+		<li>A line starting with a '/' character is a path assignment command. Paths are XPath-like
+		expressions, always starting from the root element.</li>
+		</ul>
+
+		<p>Here are some examples of paths:
+		<ul>
+		<li>/MIRCdocument/authorization/owner refers the "owner" child element of an authorization
+		element in an XML document whose root element is "MIRCdocument".</li>
+		<li>/MIRCdocument/@display refers to the "display" attribute of an XML document whose
+		root element is "MIRCdocument".</li>
+		<li>/*/* refers to any second-generation child element of an XML document, no matter what
+		its root element is named.</li>
+		<li>/*//owner refers to any "owner" element in an XML document, no matter what its root
+		element is named.</li>
+		<li>/message/segment[3] refers to the fourth (always count from zero) "segment" element in an
+		XML document whose root element is "message".
+		</li>
+		</ul>
+
+		<p>If no bracketed qualifier is present in a path segment, the first element matching the
+		segment name is selected. If all elements matching the segment name are to be selected, use
+		the "[*]" wildcard qualifier, e.g. /root/element[*].
+
+		<p>Assignment statements are of two types:
+		<ul>
+		<li>$name = expression</li>
+		<li>/path = expression</li>
+		</ul>
+		In a $name assignment, an expression can be any combination of literals
+		(quoted strings, e.g. "some text"), paths, and other names. For an path
+		assignment,an expression can be any combination of literals,
+		paths, names, or function calls. There are three functions:
+		<ul>
+		<li>$require( <em>expression</em> ) forces the creation of the element or attribute
+		identified by the path on the left side of the assignment, including all necessary
+		parent elements. The value assigned to the element or attribute is the value
+		of expression argument of the $require function.</li>
+		<li>$remove() causes the element or attribute identified by the path on the left
+		side of the assignment to be removed from the document.</li>
+		<li>$uid( <em>expression</em> ) causes the value of the element to be remapped
+		using the value of the expression as the new UID's root. The UID remapping function
+		uses the same UID remapping table as is used by the DICOM anonymizer, allowing
+		UIDs to be remapped while preserving the relationships between DICOM and XML objects.</li>
+		</ul>
+
+		<p>Here is an example script for remapping UIDs of two different types in XML
+		files whose root elements are called LidcReadMessage:
+		<pre>
+		$UIDROOT = "1.2.3.4"
+		/LidcReadMessage/ResponseHeader/SeriesInstanceUid = $uid($UIDROOT)
+		/LidcReadMessage//imageSOP_UID = $uid($UIDROOT)
+		</pre>
+		Here is an example script for doing the same work as above but at the same
+		time renaming the "SeriesInstanceUid" element to "SeriesInstanceUID":
+		<pre>
+		$UIDROOT = "1.2.3.4"
+		/LidcReadMessage/ResponseHeader/SeriesInstanceUid = $uid($UIDROOT)
+		$temp = /LidcReadMessage/ResponseHeader/SeriesInstanceUid
+		/LidcReadMessage/ResponseHeader/SeriesInstanceUID = $require($temp)
+		/LidcReadMessage/ResponseHeader/SeriesInstanceUid = $remove()
+		/LidcReadMessage//imageSOP_UID = $uid($UIDROOT)
+		</pre>
+		To assist in debugging XML anonymizer scripts, there is a special name assignment
+		command:
+		<pre>
+		$print = <em>expression</em>
+		</pre>
+		This causes the value of the expression to be printed on the console. If you are running
+		DicomEditor on a Windows system and want to use this feature, you should launch the program
+		from a command window as described at the top of this page.
+
+	</body>
+
+	</body>
+</html>

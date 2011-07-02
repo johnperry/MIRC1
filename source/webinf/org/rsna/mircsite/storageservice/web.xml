@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd"
+  [
+    <!ENTITY author    "SS-author">
+    <!ENTITY admin     "SS-admin">
+    <!ENTITY user      "SS-user">
+    <!ENTITY update    "SS-update">
+    <!ENTITY publisher "publisher">
+    <!ENTITY tomcat    "admin">
+    <!ENTITY special   "department">
+  ]>
+
+<web-app>
+
+  <servlet>
+    <servlet-name> StorageService </servlet-name>
+    <servlet-class> org.rsna.mircsite.storageservice.StorageService </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name> SubmitService </servlet-name>
+    <servlet-class> org.rsna.mircsite.storageservice.SubmitService </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name> ZipService </servlet-name>
+    <servlet-class> org.rsna.mircsite.storageservice.ZipService </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name> NewDocService </servlet-name>
+    <servlet-class> org.rsna.mircsite.storageservice.NewDocService </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name> ABRService </servlet-name>
+    <servlet-class> org.rsna.mircsite.storageservice.ABRService </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name> HttpImportService </servlet-name>
+    <servlet-class> org.rsna.mircsite.dicomservice.HttpImportService </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name> XMLServer </servlet-name>
+    <servlet-class> org.rsna.mircsite.storageservice.XMLServer </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name> AuthorService </servlet-name>
+    <servlet-class> org.rsna.mircsite.storageservice.AuthorService </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name> AdminService </servlet-name>
+    <servlet-class> org.rsna.mircsite.storageservice.AdminService </servlet-class>
+    <load-on-startup> 2 </load-on-startup>
+  </servlet>
+
+  <servlet>
+    <servlet-name> InputQueueViewer </servlet-name>
+    <servlet-class> org.rsna.mircsite.storageservice.InputQueueViewer </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name> UpdateService </servlet-name>
+    <servlet-class> org.rsna.mircsite.storageservice.UpdateService </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name> CentralRemapper </servlet-name>
+    <servlet-class> org.rsna.mircsite.dicomservice.CentralRemapper </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name> StorageConfigurator </servlet-name>
+    <servlet-class> org.rsna.mircsite.storageservice.StorageConfigurator </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name> TrialConfigurator </servlet-name>
+    <servlet-class> org.rsna.mircsite.storageservice.TrialConfigurator </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name> TCEConfigurator </servlet-name>
+    <servlet-class> org.rsna.mircsite.storageservice.TCEConfigurator </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name> AnonymizerConfigurator </servlet-name>
+    <servlet-class> org.rsna.mircsite.storageservice.AnonymizerConfigurator </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name> LoginService </servlet-name>
+    <servlet-class> org.rsna.mircsite.mircservlets.LoginService </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name> SetIPAddress </servlet-name>
+    <servlet-class> org.rsna.mircsite.mircservlets.SetIPAddress </servlet-class>
+    <load-on-startup> 1 </load-on-startup>
+  </servlet>
+
+  <servlet>
+    <servlet-name> AuthorSummary </servlet-name>
+    <servlet-class> org.rsna.mircsite.storageservice.AuthorSummary </servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name> ApplicationServer </servlet-name>
+    <servlet-class> org.rsna.mircsite.storageservice.ApplicationServer </servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name> StorageService </servlet-name>
+    <url-pattern> /service </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> SubmitService </servlet-name>
+    <url-pattern> /submit/doc </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> ZipService </servlet-name>
+    <url-pattern> /zip </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> NewDocService </servlet-name>
+    <url-pattern> /newdoc </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> ABRService </servlet-name>
+    <url-pattern> /abrdoc </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> HttpImportService </servlet-name>
+    <url-pattern> /import/* </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> XMLServer </servlet-name>
+    <url-pattern> *.xml </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> XMLServer </servlet-name>
+    <url-pattern> /trial/idtable.properties </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> XMLServer </servlet-name>
+    <url-pattern> *.dcm </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> AuthorService </servlet-name>
+    <url-pattern> /author/* </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> UpdateService </servlet-name>
+    <url-pattern> /update/* </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> CentralRemapper </servlet-name>
+    <url-pattern> /remap </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> AdminService </servlet-name>
+    <url-pattern> /admin </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> InputQueueViewer </servlet-name>
+    <url-pattern> /inputqueueviewer </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> StorageConfigurator </servlet-name>
+    <url-pattern> /admin/ssconfig </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> TrialConfigurator </servlet-name>
+    <url-pattern> /admin/tsconfig </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> TCEConfigurator </servlet-name>
+    <url-pattern> /admin/tceconfig </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> AnonymizerConfigurator </servlet-name>
+    <url-pattern> /admin/anconfig </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> AuthorSummary </servlet-name>
+    <url-pattern> /summary </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> ApplicationServer </servlet-name>
+    <url-pattern> /webstart/app </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> ApplicationServer </servlet-name>
+    <url-pattern> /webstart/get </url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name> LoginService </servlet-name>
+    <url-pattern> /login/* </url-pattern>
+  </servlet-mapping>
+
+  <mime-mapping>
+    <extension> dcm </extension>
+    <mime-type> application/dicom </mime-type>
+  </mime-mapping>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name> Author Service </web-resource-name>
+      <url-pattern> /author/* </url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name> &author; </role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name> New Document Service </web-resource-name>
+      <url-pattern> /newdoc </url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name> &author; </role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name> ABR Service </web-resource-name>
+      <url-pattern> /abrdoc </url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name> &author; </role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name> Submit Service </web-resource-name>
+      <url-pattern> /submit/doc </url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name> &author; </role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name> Zip Service </web-resource-name>
+      <url-pattern> /zip </url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name> &author; </role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name> Author Summary </web-resource-name>
+      <url-pattern> /summary </url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name> &author; </role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name> Admin Service </web-resource-name>
+      <url-pattern> /admin </url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name> &tomcat; </role-name>
+      <role-name> &admin; </role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name> Input Queue Viewer </web-resource-name>
+      <url-pattern> /inputqueueviewer </url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name> &publisher; </role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name> Update Service </web-resource-name>
+      <url-pattern> /update/* </url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name> &update; </role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name> Storage Configurator </web-resource-name>
+      <url-pattern> /admin/ssconfig </url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name> &admin; </role-name>
+      <role-name> &tomcat; </role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name> Trial Configurator </web-resource-name>
+      <url-pattern> /admin/tsconfig </url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name> &admin; </role-name>
+      <role-name> &tomcat; </role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name> TCE Configurator </web-resource-name>
+      <url-pattern> /admin/tceconfig </url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name> &admin; </role-name>
+      <role-name> &tomcat; </role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name> Anonymizer Configurator </web-resource-name>
+      <url-pattern> /admin/anconfig </url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name> &admin; </role-name>
+      <role-name> &tomcat; </role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name> Login Service </web-resource-name>
+      <url-pattern> /login </url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name> &user; </role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <login-config>
+    <auth-method> BASIC </auth-method>
+    <realm-name> Storage Service </realm-name>
+  </login-config>
+
+  <security-role>
+    <description> Author </description>
+    <role-name> &author; </role-name>
+  </security-role>
+
+  <security-role>
+    <description> Publisher </description>
+    <role-name> &publisher; </role-name>
+  </security-role>
+
+  <security-role>
+    <description> Storage Service Administrator </description>
+    <role-name> &admin; </role-name>
+  </security-role>
+
+  <security-role>
+    <description> Tomcat Administrator </description>
+    <role-name> &tomcat; </role-name>
+  </security-role>
+
+  <security-role>
+    <description> Storage Service User </description>
+    <role-name> &user; </role-name>
+  </security-role>
+
+  <security-role>
+    <description> Update Service User </description>
+    <role-name> &update; </role-name>
+  </security-role>
+
+</web-app>
