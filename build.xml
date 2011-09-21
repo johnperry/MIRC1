@@ -118,7 +118,7 @@
 
 	<target name="init">
 		<tstamp>
-			<format property="today" pattern="yyyy.MM.dd"/>
+			<format property="today" pattern="yyyy-MM-dd"/>
 			<format property="now" pattern="HH:mm:ss z"/>
 		</tstamp>
 		<echo message="Time now ${now}"/>
@@ -219,10 +219,12 @@
       <copy overwrite="true" failonerror="false" todir="${build}/FieldCenter">
          <fileset dir="${products}" includes="Decipher.jar"/>
       </copy>
-      <jar destfile="${products}/FieldCenter-installer-TRIAL.jar">
+      <jar destfile="${products}/FieldCenter-installer.jar">
          <manifest>
             <attribute name="Main-Class" value="org.rsna.fieldcenter.Installer"/>
             <attribute name="Implementation-Version" value="${today} @ ${now}"/>
+            <attribute name="Date" value="${today} at ${now}"/>
+            <attribute name="Description" value="Clinical trial imaging tool [deprecated in favor of CTP]"/>
          </manifest>
          <fileset dir="${build}"
          	includes="${fieldcenter}/Installer** ${installer}/** FieldCenter/*.*"/>
@@ -262,6 +264,8 @@
          <manifest>
             <attribute name="Main-Class" value="org.rsna.exportmanager.Installer"/>
             <attribute name="Implementation-Version" value="${today} @ ${now}"/>
+            <attribute name="Date" value="${today} at ${now}"/>
+            <attribute name="Description" value="TCE Export Manager"/>
          </manifest>
          <fileset dir="${build}"
          	includes="${exportmanager}/Installer** ${installer}/** ExportManager/*.*"/>
@@ -350,6 +354,8 @@
          <manifest>
             <attribute name="Main-Class" value="org.rsna.dicomeditor.Installer"/>
             <attribute name="Implementation-Version" value="${today} @ ${now}"/>
+            <attribute name="Date" value="${today} at ${now}"/>
+            <attribute name="Description" value="DICOM Editor/Anonymizer Tool"/>
          </manifest>
          <fileset dir="${build}"
             includes="${dicomeditor}/Installer** ${installer}/** DicomEditor/*.*"/>
@@ -547,6 +553,7 @@
             <attribute name="Main-Class" value="org.rsna.mircsite.installer.Installer"/>
             <attribute name="Version" value="${version}"/>
             <attribute name="Date" value="${today} at ${now}"/>
+            <attribute name="Description" value="Tomcat/MIRC"/>
          </manifest>
       </jar>
 
@@ -600,6 +607,8 @@
          <manifest>
             <attribute name="Main-Class" value="org.rsna.filesender.Installer"/>
             <attribute name="Implementation-Version" value="${today} @ ${now}"/>
+            <attribute name="Date" value="${today} at ${now}"/>
+            <attribute name="Description" value="File transmission utility"/>
          </manifest>
          <fileset dir="${build}"
          	includes="${filesender}/Installer** ${installer}/** FileSender/*.*"/>
@@ -665,6 +674,8 @@
          includes="${httptest}/*.* Instructions.html" >
          <manifest>
             <attribute name="Main-Class" value="org.rsna.httptest.HttpTest"/>
+            <attribute name="Date" value="${today} at ${now}"/>
+            <attribute name="Description" value="Network test utility"/>
          </manifest>
       </jar>
    </target>
