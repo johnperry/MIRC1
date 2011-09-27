@@ -2,7 +2,7 @@
 
 <project name="MIRC" basedir="." default="mircsite">
 
-   <property name="version" value="T36c"/>
+   <property name="version" value="T36d"/>
 
    <property name="build" value="${basedir}/build"/>
    <property name="products" value="${basedir}/products"/>
