@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<!-- This module is deprecated in favor of CTP and MIRC (TFS) -->
 
 <project name="MIRC" basedir="." default="mircsite">
 
